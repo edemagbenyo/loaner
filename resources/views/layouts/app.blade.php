@@ -86,11 +86,16 @@
                         <div class="panel-heading">
                             <ul class="nav nav-pills" role="tablist">
                                 <li role="presentation" class="{{Request::segment(1) == 'home' ? 'active': ''}}"><a href="{{url('home')}}">@lang('menu.das') </a></li>
-                                <li role="presentation" class="{{Request::segment(1) == 'POS' ? 'active': ''}}"><a href="#">@lang('menu.pos') </a></li>
-                                <li role="presentation" class="{{Request::segment(1) == 'departments' ? 'active': ''}}"><a href="{{route('departments.index')}}">@lang('menu.acc')</a></li>
-                                <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a href="#">Lands</a></li>
-                                <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a href="#">Real Estate</a></li>
+                                <li role="presentation" class="{{Request::segment(1) == 'account' ? 'active': ''}}"><a href="{{route('departments.index')}}">@lang('menu.acc')</a></li>
+                                @if(Auth::user()->can("*clients"))
+                                <li role="presentation" class="{{Request::segment(1) == 'clients' ? 'active': ''}}"><a href="{{route('clients.index')}}">Clients</a></li>
+                                @endif
+                                    <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a href="#">Lands</a></li>
+                                <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a href="#">Call Center</a></li>
+                                <li role="presentation" class="{{Request::segment(1) == 'suppliers' ? 'active': ''}}"><a href="{{route('suppliers.index')}}">Suppliers</a></li>
+                                @if(Auth::user()->can("*users"))
                                 <li role="presentation" class="{{Request::segment(1) == 'users' ? 'active': ''}}"><a href="{{route('users.index')}}">@lang('menu.use') </a></li>
+                                @endif
                                 <li role="presentation" class="{{Request::segment(1) == 'settings' ? 'active': ''}}"><a href="{{route('settings.index')}}">@lang('menu.set') </a></li>
                                 <li role="presentation" class="{{Request::segment(1) == 'settings' ? '': ''}}"><a href="{{route('settings.index')}}">Employees</a></li>
                             </ul>

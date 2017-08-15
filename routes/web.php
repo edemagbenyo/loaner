@@ -22,6 +22,12 @@ Route::get('/home', 'HomeController@index');
 //Users routes
 Route::resource('users','UsersController');
 
+//Clients routes
+Route::resource('clients','ClientsController');
+
+//Suppliers routes
+Route::resource('suppliers','SuppliersController');
+
 
 //Settings Routes
 Route::group(['prefix' => 'settings','middleware'=>'auth'], function () {

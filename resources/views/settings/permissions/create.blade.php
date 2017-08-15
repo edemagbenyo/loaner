@@ -24,6 +24,7 @@
                            placeholder="Display name" value="{{old('display_name')}}">
                 </div>
                 <div class="form-group">
+                    <label for="display">Description</label>
                     <textarea name="description" id="" cols="30" rows="2" class="form-control">{{old('description')}}</textarea>
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
