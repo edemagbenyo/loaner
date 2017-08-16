@@ -28,6 +28,12 @@ Route::resource('clients','ClientsController');
 //Suppliers routes
 Route::resource('suppliers','SuppliersController');
 
+//Suppliers routes
+Route::resource('lands','LandsController');
+
+//Suppliers routes
+Route::resource('calls','CallsController');
+
 
 //Settings Routes
 Route::group(['prefix' => 'settings','middleware'=>'auth'], function () {
@@ -50,6 +56,22 @@ Route::group(['prefix' => 'settings','middleware'=>'auth'], function () {
     Route::resource('permissions', 'Settings\PermissionsController');
 
 });
+
+//Account routes
+Route::group(['prefix' => 'accounts','middleware'=>'auth'], function () {
+    Route::get('index', [
+        'as' => 'accounts.index',
+        'uses' => 'AccountsController@index'
+    ]);
+
+    //Cashbook
+    Route::get('cashbook', [
+        'as' => 'accounts.cashbook',
+        'uses' => 'AccountsController@cashbook'
+    ]);
+
+});
+
 
 //Settings Routes
 Route::group(['prefix' => 'departments','middleware'=>'auth'], function () {
