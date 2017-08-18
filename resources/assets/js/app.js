@@ -7,6 +7,7 @@
 
 require('./bootstrap');
 require('./scripts');
+require('./app/sales');
 
 
 //

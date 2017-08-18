@@ -139,9 +139,8 @@
         $('span.select2').width('auto');
         $('span.select2').css('display','block');
         $('#datepicker').datetimepicker({
-            format:"YYYY-MM-DD H:mm"
+            format:"YYYY-MM-DD H:mm:s"
         });
-
 
 
     });

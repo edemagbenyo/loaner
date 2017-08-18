@@ -20,23 +20,26 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 //Users routes
-Route::resource('users','UsersController');
+Route::resource('users', 'UsersController');
 
 //Clients routes
-Route::resource('clients','ClientsController');
+Route::resource('clients', 'ClientsController');
+Route::get('api/client', [
+    'as' => 'api.client',
+    'uses' => 'ClientsController@apiClientOne'
+]);
+//Suppliers routes
+Route::resource('suppliers', 'SuppliersController');
 
 //Suppliers routes
-Route::resource('suppliers','SuppliersController');
+Route::resource('lands', 'LandsController');
 
 //Suppliers routes
-Route::resource('lands','LandsController');
-
-//Suppliers routes
-Route::resource('calls','CallsController');
+Route::resource('calls', 'CallsController');
 
 
 //Settings Routes
-Route::group(['prefix' => 'settings','middleware'=>'auth'], function () {
+Route::group(['prefix' => 'settings', 'middleware' => 'auth'], function () {
     Route::get('index', [
         'as' => 'settings.index',
         'uses' => 'SettingsController@index'
@@ -58,10 +61,15 @@ Route::group(['prefix' => 'settings','middleware'=>'auth'], function () {
 });
 
 //Account routes
-Route::group(['prefix' => 'accounts','middleware'=>'auth'], function () {
+Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
     Route::get('index', [
         'as' => 'accounts.index',
         'uses' => 'AccountsController@index'
+    ]);
+    // post sales
+    Route::post('sales/post', [
+        'as' => 'accounts.post.sales',
+        'uses' => 'AccountsController@postSales'
     ]);
 
     //Cashbook
@@ -69,12 +77,22 @@ Route::group(['prefix' => 'accounts','middleware'=>'auth'], function () {
         'as' => 'accounts.cashbook',
         'uses' => 'AccountsController@cashbook'
     ]);
+    Route::post('cashbook/post', [
+        'as' => 'accounts.post.cashbook',
+        'uses' => 'AccountsController@postCashbook'
+    ]);
+
+    //Clients accounts
+    Route::get('clients', [
+        'as' => 'accounts.clients',
+        'uses' => 'AccountsController@clients'
+    ]);
 
 });
 
 
 //Settings Routes
-Route::group(['prefix' => 'departments','middleware'=>'auth'], function () {
+Route::group(['prefix' => 'departments', 'middleware' => 'auth'], function () {
 
     Route::get('index', [
         'as' => 'departments.index',
@@ -83,30 +101,30 @@ Route::group(['prefix' => 'departments','middleware'=>'auth'], function () {
     //Rooms Routes
     Route::resource('rooms', 'Departments\RoomsController');
     //View Rooms prices
-    Route::get('rooms/view/prices',[
-        'as'=>'rooms.view.prices',
-        'uses'=>'Departments\RoomsController@viewPrices'
+    Route::get('rooms/view/prices', [
+        'as' => 'rooms.view.prices',
+        'uses' => 'Departments\RoomsController@viewPrices'
     ]);
     //Set Room price
-    Route::get('rooms/set/price/{id}',[
-        'as'=>'room.set.price',
-        'uses'=>'Departments\RoomsController@setRoomPrice'
+    Route::get('rooms/set/price/{id}', [
+        'as' => 'room.set.price',
+        'uses' => 'Departments\RoomsController@setRoomPrice'
     ]);
 
     //Edit Room Price
-    Route::post('rooms/edit/price/{id}',[
-        'as'=>'rooms.edit.price',
-        'uses'=>'Departments\RoomsController@editRoomPrice'
+    Route::post('rooms/edit/price/{id}', [
+        'as' => 'rooms.edit.price',
+        'uses' => 'Departments\RoomsController@editRoomPrice'
     ]);
 
     //Save Room price
-    Route::post('rooms/post/price',[
-        'as'=>'room.post.price',
-        'uses'=>'Departments\RoomsController@postRoomPrice'
+    Route::post('rooms/post/price', [
+        'as' => 'room.post.price',
+        'uses' => 'Departments\RoomsController@postRoomPrice'
     ]);
     //Save Room price
-    Route::post('rooms/delete/price/{id}',[
-        'as'=>'room.delete.price',
-        'uses'=>'Departments\RoomsController@deleteRoomPrice'
+    Route::post('rooms/delete/price/{id}', [
+        'as' => 'room.delete.price',
+        'uses' => 'Departments\RoomsController@deleteRoomPrice'
     ]);
 });
