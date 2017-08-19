@@ -26,18 +26,18 @@ class Client extends Model
     public function total ()
     {
 
-        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
+        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->groupBy('id')->sum('amount');
     }
     public function paid ()
     {
 
-        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->sum('amount');
+        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->groupBy('id')->sum('amount');
     }
 
     public function percentPaid ()
     {
-        $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
-        $paid = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->sum('amount');
+        $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->groupBy('id')->sum('amount');
+        $paid = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->groupBy('id')->sum('amount');
 
         return number_format(($paid/$total) * 100 , 2)."%";
     }
@@ -45,8 +45,8 @@ class Client extends Model
     {
         $account = $this->hasMany('App\ClientAccount','client_id');
 
-        $paid = $account->where(['type'=>'c'])->sum('amount');
-        $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
+        $paid = $account->where(['type'=>'c'])->groupBy('id')->sum('amount');
+        $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->groupBy('id')->sum('amount');
         $balance = $total - $paid;
         setlocale(LC_MONETARY, 'en_US');
 
