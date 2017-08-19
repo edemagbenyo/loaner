@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 class CallsController extends Controller
 {
     /**
+     * CallsController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth']);
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -99,7 +108,14 @@ class CallsController extends Controller
 //            'status'=>5,
 //            'user_id'=>Auth::user()->id
 //        ];
-//        $call = Call
+        $call = Call::find($id);
+        $call->enquiry = $request->enquiry;
+        $call->action = $request->result;
+        $call->result = $request->result;
+        $call->call_date_time = $request->call_date_time;
+        $call->save();
+
+        return redirect()->route('calls.index')->with('message','Call record has been updated');
     }
 
     /**

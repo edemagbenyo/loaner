@@ -88,6 +88,11 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'uses' => 'AccountsController@clients'
     ]);
 
+    Route::get('clients/account/{clientid}',[
+        'as'=>'view.client.account',
+        'uses'=>'AccountsController@viewClientAccount'
+    ]);
+
 });
 
 

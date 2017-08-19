@@ -17,8 +17,8 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="name">Land title</label>
-                            <input type="text" name="details" class="form-control">
+                            <label for="name">Sales details</label>
+                            <input type="text" name="details" class="form-control" required>
                         </div>
                     </div>
                 </div>

@@ -111,9 +111,18 @@ class AccountsController extends Controller
         return redirect()->route('accounts.index')->with('message','Sales has been made');
     }
 
+    public function todaySales()
+    {
+        return view('account.sales.today');
+    }
     public function clients()
     {
         return view('accounts.clients.index', ['clients' => Client::all()]);
+    }
+
+    public function viewClientAccount($id)
+    {
+        return view('accounts.clients.account',['client'=>Client::find($id)]);
     }
 
 

@@ -18,7 +18,11 @@
 
     {{--Select 2 --}}
     <link href="{{asset('select2/css/select2.min.css')}}" rel="stylesheet"/>
-    <!-- Scripts -->
+
+    @section('styles')
+    @show
+
+            <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -131,17 +135,19 @@
 <script src="{{ asset('js/moment.js') }}"></script>
 <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
 <script src="{{asset('select2/js/select2.min.js')}}"></script>
+@section('scripts')
+@show
 <script type="text/javascript">
     $(document).ready(function () {
         $("select#permissions").select2();
 
         $("select#clients").select2();
         $('span.select2').width('auto');
-        $('span.select2').css('display','block');
+        $('span.select2').css('display', 'block');
         $('#datepicker').datetimepicker({
-            format:"YYYY-MM-DD H:mm:s"
+            format: "YYYY-MM-DD H:mm:s"
         });
-
+        $('#clientTransact').DataTable();
 
     });
 </script>

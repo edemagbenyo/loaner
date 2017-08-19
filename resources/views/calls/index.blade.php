@@ -16,7 +16,7 @@
                 <tr>
                     <th>Enquiry</th>
                     <th>Action</th>
-                    <th>Status</th>
+                    <th>Results</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -27,7 +27,7 @@
                             <td>{{$call->enquiry}}</td>
                             <td>{{$call->action}}
                             </td>
-                            <td></td>
+                            <td>{{$call->result}}</td>
                             <td>
 
                                     <a class="btn btn-default" href="{{route('calls.edit',$call->id)}}">Edit</a>
