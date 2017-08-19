@@ -20,7 +20,7 @@ class Client extends Model
 
     public function account()
     {
-        return $this->hasMany('App\ClientAccount','client_id')->orderBy('created_at','desc');
+        return $this->hasMany('App\ClientAccount','client_id');
     }
 
     public function total ()
