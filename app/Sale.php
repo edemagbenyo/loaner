@@ -18,4 +18,9 @@ class Sale extends Model
     protected $dates = ['deleted_at'];
     protected $table =  'sales';
     protected $guarded = ['id','measure'];
+
+    public function client()
+    {
+        return $this->belongsTo('App\Client','client_id');
+    }
 }

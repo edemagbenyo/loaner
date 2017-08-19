@@ -4,12 +4,14 @@
         <div class="col-md-10 col-md-offset-1" style="background: #c7ddef">
             @if(session()->has('message'))
                 <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                     {{session('message')}}
                 </div>
             @endif
             <h5>
-                <a href="" class="btn btn-success">Today's sales</a>
-                <a href="" class="btn btn-info">Weekly sales</a>
+                <a href="{{route('query.sales',['fixed'=>'today'])}}" class="btn btn-success">Today's sales</a>
+                <a href="{{route('query.sales',['fixed'=>'yesterday'])}}" class="btn btn-info">Yesterday sales</a>
             </h5>
             <h3 style="text-align: center">Land Sales</h3>
             <form action="{{route('accounts.post.sales')}}" method="post">

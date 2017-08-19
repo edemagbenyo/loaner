@@ -66,6 +66,11 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'as' => 'accounts.index',
         'uses' => 'AccountsController@index'
     ]);
+
+    Route::get('query/sales/{fixed?}/{date?}/{range?}/', [
+        'as' => 'query.sales',
+        'uses' => 'AccountsController@querySales'
+    ]);
     // post sales
     Route::post('sales/post', [
         'as' => 'accounts.post.sales',
@@ -81,6 +86,19 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'as' => 'accounts.post.cashbook',
         'uses' => 'AccountsController@postCashbook'
     ]);
+    //Route for specific date cashbook record
+    Route::get('query/cashbook/{fixed?}/{date?}/{range?}/', [
+        'as' => 'query.cashbook',
+        'uses' => 'AccountsController@queryCashbook'
+    ]);
+
+    //Route for opening and current balance
+    Route::get('get/openclosebalance', [
+        'as' => 'get.openclose',
+        'uses' => 'AccountsController@getOpeningClosingBalance'
+    ]);
+
+
 
     //Clients accounts
     Route::get('clients', [
@@ -90,6 +108,17 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
 
     Route::get('clients/account/{clientid}',[
         'as'=>'view.client.account',
+        'uses'=>'AccountsController@viewClientAccount'
+    ]);
+
+    //Clients accounts
+    Route::get('suppliers', [
+        'as' => 'accounts.suppliers',
+        'uses' => 'AccountsController@suppliers'
+    ]);
+
+    Route::get('suppliers/account/{supplierid}',[
+        'as'=>'view.supplier.account',
         'uses'=>'AccountsController@viewClientAccount'
     ]);
 

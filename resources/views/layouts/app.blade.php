@@ -148,6 +148,7 @@
             format: "YYYY-MM-DD H:mm:s"
         });
         $('#clientTransact').DataTable();
+        $('#queryCash').DataTable();
 
     });
 </script>

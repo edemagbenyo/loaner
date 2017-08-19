@@ -4,13 +4,15 @@
         <div class="col-md-10 col-md-offset-1" style="background: #c7ddef">
             @if(session()->has('message'))
                 <div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                     {{session('message')}}
                 </div>
             @endif
             <h5>
-                <a href="" class="btn btn-success">Today's book</a>
-                <a href="" class="btn btn-info">Weekly book</a>
-                <a href="" class="btn btn-danger">Entire book</a>
+                <a href="{{route('query.cashbook',['fixed'=>'today'])}}" class="btn btn-success">Today's book</a>
+                <a href="{{route('query.cashbook',['fixed'=>'yesterday'])}}" class="btn btn-info">Yesterday book</a>
+                <a href="{{route('query.cashbook',['fixed'=>'full'])}}" class="btn btn-danger">Entire book</a>
             </h5>
 
             <form action="{{route('accounts.post.cashbook')}}" method="post">

@@ -18,4 +18,12 @@ $(function () {
         return balance;
     }
 
+    $hidden_info = $('#hidden-data');
+    $open = $('#open');
+    $current = $('#current');
+    $.get($hidden_info.data('url'),{info_data:$hidden_info.data('date')},function(data){
+        $open.text(data.opening);
+        $current.text(data.current);
+    })
+
 });

@@ -7,6 +7,7 @@ use App\Client;
 use App\ClientAccount;
 use App\Land;
 use App\Sale;
+use App\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,52 @@ class AccountsController extends Controller
         return view('accounts.cash-book', ['clients' => Client::all(), 'lands' => Land::all(),'open'=>$open]);
     }
 
+    /**
+     * Get the sales for the specified date
+     *
+     * @param null $fixed
+     * @param null $date
+     * @param null $range
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function queryCashbook($fixed = NULL ,$date=NULL, $range=NULL)
+    {
+        if($fixed == 'today'){
+            $sales = Cashbook::where('updated_at','>=',Carbon::today())->where('updated_at','<=',Carbon::now())->get();
+            $date = 'Today';
+
+        }elseif($fixed =='yesterday'){
+            $sales = Cashbook::where('updated_at','>=',Carbon::yesterday())->where('updated_at','<=',Carbon::today())->get();
+            $date ='Yesterday';
+        }elseif($fixed =='full'){
+            $sales = Cashbook::all();
+            $date ='All time';
+        }
+
+        return view('accounts.cashbook.query',['sales'=>$sales,'date'=>$date]);
+    }
+
+    public function getOpeningClosingBalance(Request $request)
+    {
+        if($request->info_data == 'Today'){
+            $in = Cashbook::where('updated_at','<',Carbon::today())->where('type','c')->sum('amount');
+            $out = Cashbook::where('updated_at','<',Carbon::today())->where('type','d')->sum('amount');
+
+            $in2 = Cashbook::where('updated_at','<',Carbon::now())->where('type','c')->sum('amount');
+            $out2 = Cashbook::where('updated_at','<',Carbon::now())->where('type','d')->sum('amount');
+
+
+            $balance = $in - $out;
+            $balance2 = $in2 - $out2;
+
+            $data = [
+                'opening'=>$balance,
+                'current'=>$balance2
+            ];
+            return response()->json($data);
+        }
+
+    }
     /**
      * Post a cash transaction
      */
@@ -111,9 +158,25 @@ class AccountsController extends Controller
         return redirect()->route('accounts.index')->with('message','Sales has been made');
     }
 
-    public function todaySales()
+    /**
+     * Get the sales for a specified date
+     *
+     * @param null $fixed
+     * @param null $date
+     * @param null $range
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function querySales($fixed = NULL ,$date=NULL, $range=NULL)
     {
-        return view('account.sales.today');
+        if($fixed == 'today'){
+            $sales = Sale::where('updated_at','>=',Carbon::today())->where('updated_at','<=',Carbon::now())->get();
+            $date = 'Today';
+        }elseif($fixed =='yesterday'){
+            $sales = Sale::where('updated_at','>=',Carbon::yesterday())->where('updated_at','<=',Carbon::today())->get();
+            $date ='Yesterday';
+        }
+
+        return view('accounts.sales.query',['sales'=>$sales,'date'=>$date]);
     }
     public function clients()
     {
@@ -123,6 +186,17 @@ class AccountsController extends Controller
     public function viewClientAccount($id)
     {
         return view('accounts.clients.account',['client'=>Client::find($id)]);
+    }
+
+    public function suppliers()
+    {
+        return view('accounts.suppliers.index', ['suppliers' => Supplier::all()]);
+    }
+
+
+    public function landsStatus()
+    {
+        
     }
 
 
