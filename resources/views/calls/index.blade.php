@@ -8,15 +8,18 @@
                 {{session('message')}}
             </div>
         @endif
-        <div class="col-md-10 col-md-offset-1">
-            <a href="" class="btn btn-success" data-toggle="modal" data-target="#makeCall">Make Call</a>
-            <h3>Today's calls</h3>
+        <div class="col-md-12">
+            <a href="" class="btn btn-success" data-toggle="modal" data-target="#makeCall">Create a schedule</a>
+
+            <h3>Today's Enquiries</h3>
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th>Call made by</th>
                     <th>Enquiry</th>
                     <th>Action</th>
                     <th>Results</th>
+                    <th>Time</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -24,14 +27,18 @@
                 @if(isset($calls) && count($calls))
                     @foreach($calls as $call)
                         <tr>
+                            <td>{{ ($call->caller->id == Auth::user()->id) ? " Me" : $call->caller->name}}</td>
                             <td>{{$call->enquiry}}</td>
                             <td>{{$call->action}}
                             </td>
                             <td>{{$call->result}}</td>
+                            <td>{{$call->updated_at->toTimeString()}}</td>
                             <td>
-
+                                @if($call->caller->id == Auth::user()->id)
                                     <a class="btn btn-default" href="{{route('calls.edit',$call->id)}}">Edit</a>
-
+                                @else
+                                    -
+                                @endif
                             </td>
                         </tr>
                     @endforeach

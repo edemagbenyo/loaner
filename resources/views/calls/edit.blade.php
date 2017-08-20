@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="">Date Time</label>
-                            <input type="text" id="datepicker"  name=call_date_time"" class="form-control call-date" value="{{old('call_date_time',$call->call_date_time)}}" required>
+                            <input type="text" id="datepicker"  name="call_date_time" class="form-control call-date" value="{{old('call_date_time',$call->call_date_time)}}" required>
                             <label for="name" class="control-label">Enquiry</label>
                             <textarea name="enquiry" id="enquiry" cols="30" rows="2" class="form-control">{{old('enquiry',$call->enquiry)}}</textarea>
                         </div>
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label for="name" class="control-label">Result</label>
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-                    <textarea name="result" id="result" cols="30" rows="2" class="form-control"></textarea>
+                    <textarea name="result" id="result" cols="30" rows="2" class="form-control">{{old('result',$call->result)}}</textarea>
                 </div>
 
             <input type="submit" class="btn btn-success">

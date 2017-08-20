@@ -192,11 +192,14 @@ class AccountsController extends Controller
     {
         return view('accounts.suppliers.index', ['suppliers' => Supplier::all()]);
     }
-
-
-    public function landsStatus()
+    public function viewSupplierAccount($id)
     {
-        
+        return view('accounts.suppliers.account',['supplier'=>Supplier::find($id)]);
+    }
+
+    public function landStatus()
+    {
+        return view('accounts.lands.index', ['lands' => Land::all()]);
     }
 
 

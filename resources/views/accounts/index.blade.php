@@ -11,8 +11,8 @@
                     href="{{route('accounts.clients')}}">Clients</a></li>
         <li role="presentation" class="{{(Request::segment(2) == 'suppliers' ) ? 'active': ''}}"><a
                     href="{{route('accounts.suppliers')}}">Suppliers</a></li>
-        <li role="presentation" class="{{(Request::segment(2) == 'bar' ) ? 'restaurant': ''}}"><a
-                    href="{{route('users.create')}}">Land Status</a></li>
+        <li role="presentation" class="{{(Request::segment(2) == 'lands' ) ? 'active': ''}}"><a
+                    href="{{route('accounts.lands')}}">Land Status</a></li>
     </ul>
     <div class="">
         @yield('account-content')

@@ -1,9 +1,15 @@
 @extends('accounts/index')
+@section('styles')
+    @parent
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+
+@endsection
 @section('account-content')
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <h3>Suppliers Account</h3>
-            <table class="table table-bordered">
+            <table class="table table-bordered datatable">
                 <thead>
                 <tr>
                     <th>Name
@@ -16,7 +22,7 @@
                 <tbody>
                 @if(isset($suppliers) && count($suppliers))
                     @foreach($suppliers as $supplier)
-                        @if(count($supplier->account))
+                        @if(isset($supplier->account) && count($supplier->account))
                             <tr>
                                 <td>{{$supplier->name}}</td>
                                 <td title="{{$supplier->lastPayment()->created_at->toDateTimeString()}}">{{$supplier->lastPayment()->amount}}  on {{$supplier->lastPayment()->created_at->toDateString()}} </td>
@@ -44,4 +50,9 @@
             </table>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
 @endsection

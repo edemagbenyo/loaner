@@ -1,4 +1,10 @@
 @extends('settings/index')
+@section('styles')
+    @parent
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+
+@endsection
 @section('settings-content')
 
     <div class="row">
@@ -11,7 +17,7 @@
         @endif
         <hr>
         <div class="col-md-6">
-            <table class="table table-bordered">
+            <table class="table table-bordered datatable">
                 <thead>
                 <tr>
                     <th>Roles <a href="{{route('roles.create')}}" class="pull-right">Add Role <span
@@ -38,10 +44,10 @@
                 @endif
                 </tbody>
             </table>
-            {{ $roles->links() }}
+{{--            {{ $roles->links() }}--}}
         </div>
         <div class="col-md-6">
-            <table class="table table-bordered">
+            <table class="table table-bordered datatable">
                 <thead>
                 <tr>
                     <th>Permissions <a href="{{route('permissions.create')}}" class="pull-right">Add Permission <span
@@ -67,7 +73,11 @@
                 @endif
                 </tbody>
             </table>
-            {{ $permissions->links() }}
+            {{--{{ $permissions->links() }}--}}
         </div>
     </div>
+@endsection
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
 @endsection

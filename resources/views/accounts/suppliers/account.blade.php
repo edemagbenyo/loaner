@@ -11,19 +11,19 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <h3>User Details</h3>
+                    <h3>Supplier Details</h3>
                     <table class="table">
                         <tr>
                             <td>Name</td>
-                            <td>{{$client->name}}</td>
+                            <td>{{$supplier->name or "N/A"}}</td>
                         </tr>
                         <tr>
                             <td>Contact</td>
-                            <td>{{$client->contact}}</td>
+                            <td>{{$supplier->contact or "N/A"}}</td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td>{{$client->email}}</td>
+                            <td>{{$supplier->email or "N/A"}}</td>
                         </tr>
                     </table>
                 </div>
@@ -33,21 +33,21 @@
                     <table class="table">
                         <tr>
                             <td>Total</td>
-                            <td style="font-weight: bold">{{number_format($client->total())}}</td>
+                            <td style="font-weight: bold">{{number_format($supplier->total())}}</td>
                         </tr>
                         <tr>
-                            <td>Payment made</td>
-                            <td style="font-weight: bold">{{number_format($client->paid())}}</td>
+                            <td>Payment made to {{$supplier->name or "supplier"}}</td>
+                            <td style="font-weight: bold">{{number_format($supplier->paid())}}</td>
                         </tr>
                         <tr>
                             <td>Balance</td>
-                            <td style="font-weight: bold">{{$client->balance()}}</td>
+                            <td style="font-weight: bold">{{$supplier->balance()}}</td>
                         </tr>
                     </table>
                 </div>
             </div>
             <h3>Account transactions</h3>
-            <table class="table table-bordered" id="clientTransact">
+            <table class="table table-bordered datatable">
                 <thead>
                 <tr>
                     <th>Details</th>
@@ -57,18 +57,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if(isset($client->account) && count($client->account))
-                    @foreach($client->account as $t)
+                @if(isset($supplier->account) && count($supplier->account))
+                    @foreach($supplier->account as $t)
                         <tr>
                             <td title="{{$t->details}}">{{substr($t->details,0,40)}}</td>
-                            <td>{{($t->type=='c')?"Payment":"Sales"}}</td>
+                            <td>{{($t->type=='c')?"Purchase":"Payment"}}</td>
                             <td>{{$t->amount}}</td>
                             <td>{{$t->created_at->toDateTimeString() }}</td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="4">No client yet.</td>
+                        <td colspan="4">No supplier yet.</td>
                     </tr>
                 @endif
                 </tbody>

@@ -97,24 +97,35 @@
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" class="{{Request::segment(1) == 'home' ? 'active': ''}}"><a
                                         href="{{url('home')}}">@lang('menu.das') </a></li>
-                            <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a
-                                        href="{{route('accounts.index')}}">@lang('menu.acc')</a></li>
+                            @if(Auth::user()->can("*accounts"))
+                                <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a
+                                            href="{{route('accounts.index')}}">@lang('menu.acc')</a></li>
+                            @endif
                             @if(Auth::user()->can("*clients"))
                                 <li role="presentation" class="{{Request::segment(1) == 'clients' ? 'active': ''}}"><a
                                             href="{{route('clients.index')}}">Clients</a></li>
                             @endif
-                            <li role="presentation" class="{{Request::segment(1) == 'lands' ? 'active': ''}}"><a
-                                        href="{{route('lands.index')}}">Lands</a></li>
-                            <li role="presentation" class="{{Request::segment(1) == 'calls' ? 'active': ''}}"><a
-                                        href="{{route('calls.index')}}">Call Center</a></li>
-                            <li role="presentation" class="{{Request::segment(1) == 'suppliers' ? 'active': ''}}"><a
-                                        href="{{route('suppliers.index')}}">Suppliers</a></li>
+                            @if(Auth::user()->can("*lands"))
+                                <li role="presentation" class="{{Request::segment(1) == 'lands' ? 'active': ''}}"><a
+                                            href="{{route('lands.index')}}">Lands</a></li>
+                            @endif
+                            @if(Auth::user()->can("*calls"))
+                                <li role="presentation" class="{{Request::segment(1) == 'calls' ? 'active': ''}}"><a
+                                            href="{{route('calls.index')}}">Call Center</a></li>
+                            @endif
+                            @if(Auth::user()->can("*suppliers"))
+                                <li role="presentation" class="{{Request::segment(1) == 'suppliers' ? 'active': ''}}"><a
+                                            href="{{route('suppliers.index')}}">Suppliers</a></li>
+                            @endif
+
                             @if(Auth::user()->can("*users"))
                                 <li role="presentation" class="{{Request::segment(1) == 'users' ? 'active': ''}}"><a
                                             href="{{route('users.index')}}">@lang('menu.use') </a></li>
                             @endif
-                            <li role="presentation" class="{{Request::segment(1) == 'settings' ? 'active': ''}}"><a
-                                        href="{{route('settings.index')}}">@lang('menu.set') </a></li>
+                            @if(Auth::user()->can("*settings"))
+                                <li role="presentation" class="{{Request::segment(1) == 'settings' ? 'active': ''}}"><a
+                                            href="{{route('settings.index')}}">@lang('menu.set') </a></li>
+                            @endif
                         </ul>
                     </div>
 
@@ -149,6 +160,7 @@
         });
         $('#clientTransact').DataTable();
         $('#queryCash').DataTable();
+        $('.datatable').DataTable();
 
     });
 </script>

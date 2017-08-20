@@ -27,7 +27,7 @@ class CallsController extends Controller
     {
         //
 
-        return view('calls.index',['calls'=>Call::all(),'clients'=>Client::all()]);
+        return view('calls.index',['calls'=>Call::orderBy('updated_at','desc')->get(),'clients'=>Client::all()]);
     }
 
     /**
@@ -113,7 +113,8 @@ class CallsController extends Controller
         $call->action = $request->result;
         $call->result = $request->result;
         $call->call_date_time = $request->call_date_time;
-        $call->save();
+
+//        $call->save();
 
         return redirect()->route('calls.index')->with('message','Call record has been updated');
     }

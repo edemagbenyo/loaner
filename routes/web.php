@@ -119,7 +119,14 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
 
     Route::get('suppliers/account/{supplierid}',[
         'as'=>'view.supplier.account',
-        'uses'=>'AccountsController@viewClientAccount'
+        'uses'=>'AccountsController@viewSupplierAccount'
+    ]);
+
+    //Lands Status
+    //Clients accounts
+    Route::get('lands', [
+        'as' => 'accounts.lands',
+        'uses' => 'AccountsController@landStatus'
     ]);
 
 });

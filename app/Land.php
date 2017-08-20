@@ -17,4 +17,11 @@ class Land extends Model
     protected $dates = ['deleted_at'];
 
     protected  $guarded = ['id','payment'];
+
+    public function percentSold()
+    {
+        $land =$this->size;
+        $sold = $this->hasMany('App\Sale','land_id')->sum('dimension');
+        return number_format(($sold/$land) * 100 , 2)."%";
+    }
 }

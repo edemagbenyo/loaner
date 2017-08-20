@@ -48,7 +48,6 @@ class Client extends Model
         $paid = $account->where(['type'=>'c'])->sum('amount');
         $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
         $balance = $total - $paid;
-        setlocale(LC_MONETARY, 'en_US');
 
         return number_format($balance);
     }

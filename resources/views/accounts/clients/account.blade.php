@@ -11,7 +11,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <h3>User Details</h3>
+                    <h3>Client Details</h3>
                     <table class="table">
                         <tr>
                             <td>Name</td>

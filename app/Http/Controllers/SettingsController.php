@@ -21,8 +21,8 @@ class SettingsController extends Controller
 
     public function getRolesAndPermissions()
     {
-        $roles = Role::paginate(5);
-        $permissions = Permission::paginate(5);
+        $roles = Role::all();
+        $permissions = Permission::all();
         return view('settings/roles-perms',compact(['roles','permissions']));
     }
 }

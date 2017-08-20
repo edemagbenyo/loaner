@@ -30,6 +30,27 @@ class Supplier extends Model
 
         return number_format(($paid/$total) * 100 , 2)."%";
     }
+    public function total ()
+    {
+
+        return $this->hasMany('App\SupplierAccount','supplier_id')->where(['type'=>'c'])->sum('amount');
+    }
+    public function paid ()
+    {
+
+        return $this->hasMany('App\SupplierAccount','supplier_id')->where(['type'=>'d'])->sum('amount');
+    }
+
+    public function balance()
+    {
+        $account = $this->hasMany('App\SupplierAccount','supplier_id');
+
+        $paid = $account->where(['type'=>'d'])->sum('amount');
+        $total = $this->hasMany('App\SupplierAccount','supplier_id')->where(['type'=>'c'])->sum('amount');
+        $balance = $total - $paid;
+
+        return number_format($balance);
+    }
 
     public function lastPayment()
     {
