@@ -50,19 +50,25 @@
             <table class="table table-bordered datatable">
                 <thead>
                 <tr>
-                    <th>Permissions <a href="{{route('permissions.create')}}" class="pull-right">Add Permission <span
-                                    class="glyphicon glyphicon-plus-sign"></span> </a></th>
+                    <th>Permissions
+                        @if(Auth::user()->can("create-permissions"))
+                        <a href="{{route('permissions.create')}}" class="pull-right">Add Permission <span
+                                    class="glyphicon glyphicon-plus-sign"></span> </a>
+                        @endif
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 @if(isset($permissions) && count($permissions))
                     @foreach($permissions as $perm)
                         <tr>
-                            <td>{{$perm->display_name}}
+                            <td title="{{$perm->description}}">{{$perm->display_name}}
+                                @if(Auth::user()->can("create-permissions"))
                                 <div class="btn-group pull-right" role="group" aria-label="...">
                                     <button type="button" class="btn btn-default">Edit</button>
                                     <button type="button" class="btn btn-danger">Delete</button>
                                 </div>
+                                    @endif
                             </td>
                         </tr>
                     @endforeach

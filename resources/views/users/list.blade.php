@@ -1,4 +1,10 @@
 @extends('users/index')
+@section('styles')
+    @parent
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+
+@endsection
 @section('users-content')
 
     <div class="row">
@@ -11,12 +17,17 @@
         @endif
         <div class="col-md-8 col-md-offset-2">
             <h3>List of Users</h3>
-            <table class="table table-bordered">
+            <table class="table table-bordered datatable">
                 <thead>
                 <tr>
-                    <th>Name <a href="{{route('users.create')}}" class="pull-right">Add User <span
-                                    class="glyphicon glyphicon-plus-sign"></span>
-                        </a></th>
+                    <th>
+                        Name
+                        @if(Auth::user()->can(["manage-users","add-users"]))
+                            <a href="{{route('users.create')}}" class="pull-right">Add User <span
+                                        class="glyphicon glyphicon-plus-sign"></span>
+                            </a>
+                        @endif
+                    </th>
                     <th>Role</th>
                     <th>Options</th>
                 </tr>
@@ -31,15 +42,19 @@
                             <td>
                                 @if(count($user->roles))
                                     {{ $user->roles[0]->display_name }}
-                                    @else
+                                @else
                                     N/A
                                 @endif
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-                                    <a class="btn btn-default" href="{{route('users.edit',$user->id)}}">Edit</a>
-                                    @if($user->id != Auth::user()->id)
-                                        <a class="btn btn-danger">Delete</a>
+                                    @if(Auth::user()->can(["manage-users","edit-users"]))
+                                        <a class="btn btn-default" href="{{route('users.edit',$user->id)}}">Edit</a>
+                                    @endif
+                                    @if(Auth::user()->can(["manage-users","delete-users"]))
+                                        @if($user->id != Auth::user()->id)
+                                            <a class="btn btn-danger">Delete</a>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
@@ -52,7 +67,10 @@
                 @endif
                 </tbody>
             </table>
-            {{ $users->links() }}
         </div>
     </div>
+@endsection
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
 @endsection

@@ -37,10 +37,12 @@
                                 @if(Auth::user()->can(["manage-clients","edit-clients"]))
                                     <a class="btn btn-default" href="{{route('clients.edit',$client->id)}}">Edit</a>
                                 @endif
-                                {!! Form::open(['route' => ['clients.destroy', $client->id],'method'=>'post','id'=>'delete-client','style'=>'display:inline-block']) !!}
-                                <input name="_method" type="hidden" value="DELETE">
-                                <button class="btn btn-danger">Delete</button>
-                                {!! Form::close() !!}
+                                @if(Auth::user()->can(["manage-clients","delete-clients"]))
+                                    {!! Form::open(['route' => ['clients.destroy', $client->id],'method'=>'post','id'=>'delete-client','style'=>'display:inline-block']) !!}
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <button class="btn btn-danger">Delete</button>
+                                    {!! Form::close() !!}
+                                @endif
 
                             </td>
                         </tr>

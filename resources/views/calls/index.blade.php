@@ -9,8 +9,9 @@
             </div>
         @endif
         <div class="col-md-12">
-            <a href="" class="btn btn-success" data-toggle="modal" data-target="#makeCall">Create a schedule</a>
-
+            @if(Auth::user()->can(["create-schedules","manage-calls"]))
+                <a href="" class="btn btn-success" data-toggle="modal" data-target="#makeCall">Create a schedule</a>
+            @endif
             <h3>Today's Enquiries</h3>
             <table class="table table-bordered">
                 <thead>

@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('styles')
+    @parent
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+
+@endsection
 @section('content')
 
     <div class="row">
@@ -37,10 +43,12 @@
                                 @if(Auth::user()->can(["manage-suppliers","edit-suppliers"]))
                                     <a class="btn btn-default" href="{{route('suppliers.edit',$supplier->id)}}">Edit</a>
                                 @endif
-                                {!! Form::open(['route' => ['suppliers.destroy', $supplier->id],'method'=>'post','id'=>'delete-supplier','style'=>'display:inline-block']) !!}
-                                <input name="_method" type="hidden" value="DELETE">
-                                <button class="btn btn-danger">Delete</button>
-                                {!! Form::close() !!}
+                                @if(Auth::user()->can(["manage-suppliers","delete-suppliers"]))
+                                    {!! Form::open(['route' => ['suppliers.destroy', $supplier->id],'method'=>'post','id'=>'delete-supplier','style'=>'display:inline-block']) !!}
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <button class="btn btn-danger">Delete</button>
+                                    {!! Form::close() !!}
+                                @endif
 
                             </td>
                         </tr>

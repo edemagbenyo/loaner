@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -21,7 +22,12 @@ class UsersController extends Controller
     public function index()
     {
         //
-        $users = User::paginate(7);
+
+        if (Auth::user()->email == 'superuser@lhost.com'):
+            $users = User::all();
+        else:
+            $users = User::where('email','!=','superuser@lhost.com')->get();
+        endif;
         return view('users/list', compact('users'));
     }
 
@@ -34,7 +40,11 @@ class UsersController extends Controller
     {
         //
 
-        $roles = Role::all();
+        if (Auth::user()->email == 'superuser@lhost.com'):
+            $roles = Role::all();
+        else:
+            $roles = Role::where('name', '!=', 'super')->get();
+        endif;
         return view('users.create', compact('roles'));
     }
 
@@ -78,13 +88,18 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param User $user
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function edit(User $user)
     {
         //
-        $roles = Role::all();
+        if (Auth::user()->email == 'superuser@lhost.com'):
+            $roles = Role::all();
+        else:
+            $roles = Role::where('name', '!=', 'super')->get();
+        endif;
         return view('users/edit', compact(['user', 'roles']));
     }
 

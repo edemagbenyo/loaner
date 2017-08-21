@@ -73,8 +73,9 @@ class RolesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param Role $role
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function edit(Role $role)
     {

@@ -37,10 +37,12 @@
                                 @if(Auth::user()->can(["manage-lands","edit-lands"]))
                                     <a class="btn btn-default" href="{{route('lands.edit',$land->id)}}">Edit</a>
                                 @endif
-                                {!! Form::open(['route' => ['lands.destroy', $land->id],'method'=>'post','id'=>'delete-land','style'=>'display:inline-block']) !!}
-                                <input name="_method" type="hidden" value="DELETE">
-                                <button class="btn btn-danger">Delete</button>
-                                {!! Form::close() !!}
+                                @if(Auth::user()->can(["manage-lands","delete-lands"]))
+                                    {!! Form::open(['route' => ['lands.destroy', $land->id],'method'=>'post','id'=>'delete-land','style'=>'display:inline-block']) !!}
+                                    <input name="_method" type="hidden" value="DELETE">
+                                    <button class="btn btn-danger">Delete</button>
+                                    {!! Form::close() !!}
+                                @endif
 
                             </td>
                         </tr>
