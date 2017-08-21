@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('styles')
+    @parent
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+
+@endsection
 @section('content')
     <div class="row">
         @if(session('message'))
@@ -12,8 +18,8 @@
             @if(Auth::user()->can(["create-schedules","manage-calls"]))
                 <a href="" class="btn btn-success" data-toggle="modal" data-target="#makeCall">Create a schedule</a>
             @endif
-            <h3>Today's Enquiries</h3>
-            <table class="table table-bordered">
+            <h3>Enquiries</h3>
+            <table class="table table-bordered datatable">
                 <thead>
                 <tr>
                     <th>Call made by</th>
@@ -21,6 +27,7 @@
                     <th>Action</th>
                     <th>Results</th>
                     <th>Time</th>
+                    <th>Customer</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -34,6 +41,7 @@
                             </td>
                             <td>{{$call->result}}</td>
                             <td>{{$call->updated_at->toTimeString()}}</td>
+                            <td>{{$call->name}}</td>
                             <td>
                                 @if($call->caller->id == Auth::user()->id)
                                     <a class="btn btn-default" href="{{route('calls.edit',$call->id)}}">Edit</a>
@@ -54,4 +62,8 @@
     </div>
 
     @include('calls.call')
+@endsection
+@section('scripts')
+    @parent
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.js"></script>
 @endsection

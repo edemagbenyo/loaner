@@ -110,11 +110,10 @@ class CallsController extends Controller
 //        ];
         $call = Call::find($id);
         $call->enquiry = $request->enquiry;
-        $call->action = $request->result;
+        $call->action = $request->action;
         $call->result = $request->result;
         $call->call_date_time = $request->call_date_time;
-
-//        $call->save();
+        $call->save();
 
         return redirect()->route('calls.index')->with('message','Call record has been updated');
     }
