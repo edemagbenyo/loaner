@@ -20,7 +20,7 @@
         @endif
         @if(Auth::user()->can("*lands"))
             <div class="col-md-3">
-                <a class="btn btn-lg btn-danger" ref="{{route('lands.index')}}">Lands</a>
+                <a class="btn btn-lg btn-danger" href="{{route('lands.index')}}">Lands</a>
             </div>
         @endif
     </div>
