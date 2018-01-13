@@ -34,4 +34,12 @@ class User extends Authenticatable
     ];
 
 
+    /**
+    * Calls made by this user
+    *
+    **/
+    public function calls(){
+        return $this->hasMany('App\Call','user_id');
+    }   
+
 }

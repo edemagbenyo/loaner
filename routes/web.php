@@ -48,7 +48,18 @@ Route::resource('suppliers', 'SuppliersController');
 //Suppliers routes
 Route::resource('lands', 'LandsController');
 
-//Suppliers routes
+//Users calls
+Route::get('users-calls',[
+    'as'=>'userscalls',
+    'uses'=>'CallsController@usersCalls'
+]);
+//User calls
+Route::get('user-calls/{userid}',[
+    'as'=>'usercalls',
+    'uses'=>'CallsController@userCalls'
+]);
+
+//Calls routes
 Route::resource('calls', 'CallsController');
 
 

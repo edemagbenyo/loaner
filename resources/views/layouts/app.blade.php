@@ -113,7 +113,7 @@
                                             href="{{route('lands.index')}}">Lands</a></li>
                             @endif
                             @if(Auth::user()->can("*calls"))
-                                <li role="presentation" class="{{Request::segment(1) == 'calls' ? 'active': ''}}"><a
+                                <li role="presentation" class="{{(Request::segment(1) == 'calls'|| Request::segment(1) == 'users-calls' || Request::segment(1) == 'user-calls') ? 'active': ''}}"><a
                                             href="{{route('calls.index')}}">Call Center</a></li>
                             @endif
                             @if(Auth::user()->can("*suppliers"))

@@ -15,4 +15,12 @@ class Call extends Model
     {
         return $this->belongsTo('App\User','user_id');
     }
+
+    /**
+    * Customer information
+    *
+    **/
+    public function customer(){
+     return $this->belongsTo('App\Client','customer_id');
+    }
 }

@@ -6,7 +6,8 @@ use App\Call;
 use App\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use DB;
+use App\User;
 class CallsController extends Controller
 {
     /**
@@ -127,5 +128,30 @@ class CallsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+    * Users Calls
+    *
+    **/
+    public function usersCalls(){
+        $calls = DB::select('select count(user_id) as times, user_id  from calls group by user_id ');
+        // dd($calls);
+        foreach ($calls as $call) {
+            $call->user_id = User::find($call->user_id);
+        }
+        // $calls = DB::table('calls')->groupBy('user_id')->get(['id']);
+        return view('calls.users',['calls'=>$calls,'clients'=>Client::all()]);
+
+    }
+
+    /**
+    * User Call
+    *
+    **/
+    public function userCalls($userid){
+        $calls = User::find($userid)->calls;
+        // dd($calls);
+        return view('calls.user',['calls'=>$calls,'clients'=>Client::all(),'userTrack'=>User::find($userid)]);
     }
 }

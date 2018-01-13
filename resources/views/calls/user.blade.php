@@ -21,37 +21,24 @@
              @if(Auth::user()->can(["manage-users"]))
              <a class="btn btn-info" href="{{route('userscalls')}}">Users Call track</a>
              @endif
-            <h3>Enquiries</h3>
+            <h3>{{$userTrack->name. ' calls tracking'}}</h3>
             <table class="table table-bordered datatable">
                 <thead>
                 <tr>
-                    <th>Call made by</th>
                     <th>Enquiry</th>
                     <th>Action</th>
-                    <th>Results</th>
-                    <th>Time</th>
                     <th>Customer</th>
-                    <th>Options</th>
+                    <th>Date</th>
                 </tr>
                 </thead>
                 <tbody>
                 @if(isset($calls) && count($calls))
                     @foreach($calls as $call)
                         <tr>
-                            <td>{{ ($call->caller->id == Auth::user()->id) ? " Me" : $call->caller->name}}</td>
                             <td>{{$call->enquiry}}</td>
-                            <td>{{$call->action}}
-                            </td>
-                            <td>{{$call->result}}</td>
-                            <td>{{$call->updated_at->toTimeString()}}</td>
-                            <td>{{$call->name}}</td>
-                            <td>
-                                @if($call->caller->id == Auth::user()->id)
-                                    <a class="btn btn-default" href="{{route('calls.edit',$call->id)}}">Edit</a>
-                                @else
-                                    -
-                                @endif
-                            </td>
+                            <td>{{$call->action}}</td>
+                            <td>{{$call->customer->name or "N/A"}}</td>
+                            <td>{{$call->call_date_time}}</td>
                         </tr>
                     @endforeach
                 @else
@@ -63,8 +50,8 @@
             </table>
         </div>
     </div>
-
     @include('calls.call')
+
 @endsection
 @section('scripts')
     @parent

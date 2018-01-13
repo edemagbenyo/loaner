@@ -25,12 +25,8 @@
             <table class="table table-bordered datatable">
                 <thead>
                 <tr>
-                    <th>Call made by</th>
-                    <th>Enquiry</th>
-                    <th>Action</th>
-                    <th>Results</th>
-                    <th>Time</th>
-                    <th>Customer</th>
+                    <th>Name</th>
+                    <th>Number of Calls</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -38,20 +34,9 @@
                 @if(isset($calls) && count($calls))
                     @foreach($calls as $call)
                         <tr>
-                            <td>{{ ($call->caller->id == Auth::user()->id) ? " Me" : $call->caller->name}}</td>
-                            <td>{{$call->enquiry}}</td>
-                            <td>{{$call->action}}
-                            </td>
-                            <td>{{$call->result}}</td>
-                            <td>{{$call->updated_at->toTimeString()}}</td>
-                            <td>{{$call->name}}</td>
-                            <td>
-                                @if($call->caller->id == Auth::user()->id)
-                                    <a class="btn btn-default" href="{{route('calls.edit',$call->id)}}">Edit</a>
-                                @else
-                                    -
-                                @endif
-                            </td>
+                            <td>{{$call->user_id->name}}</td>
+                            <td>{{$call->times}}</td>
+                            <td><a href="{{route('usercalls',['userid'=>$call->user_id->id])}}">Track</a></td>
                         </tr>
                     @endforeach
                 @else
@@ -63,8 +48,8 @@
             </table>
         </div>
     </div>
-
     @include('calls.call')
+
 @endsection
 @section('scripts')
     @parent
