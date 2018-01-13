@@ -18,9 +18,23 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-
+//Change user password
+Route::get('users/change-password',[
+    'as'=>'changepassword',
+    'uses'=>'UsersController@changePassword'
+]);
+Route::put('users/change-password',[
+    'as'=>'changepassword',
+    'uses'=>'UsersController@updatePassword'
+]);
+Route::post('users/reset-password',[
+    'as'=>'resetpassword',
+    'uses'=>'UsersController@resetPassword'
+]);
 //Users routes
 Route::resource('users', 'UsersController');
+
+
 
 //Clients routes
 Route::resource('clients', 'ClientsController');

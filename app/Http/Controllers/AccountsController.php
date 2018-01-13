@@ -128,6 +128,14 @@ class AccountsController extends Controller
 
     public function postSales(Request $request)
     {
+        $message=[
+            'land_id.required'=>"Kindly select a land and refill the information"
+        ];
+        //Validation
+        $this->validate($request,[
+            'client_id'=>'required',
+            'land_id'=>'required',
+        ],$message);
         //Create the sales
 
         Sale::create($request->all());

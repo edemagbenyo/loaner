@@ -76,6 +76,9 @@
                                                      document.getElementById('logout-form').submit();">
                                         Logout
                                     </a>
+                                    <a href="{{ route('changepassword') }}">
+                                        Change password
+                                    </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                           style="display: none;">

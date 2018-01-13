@@ -2,6 +2,15 @@
 @section('account-content')
     <div class="row">
         <div class="col-md-10 col-md-offset-1" style="background: #c7ddef">
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                </div>
+            @endif
             @if(session()->has('message'))
                 <div class="alert alert-success">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -20,7 +29,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="name">Sales details</label>
-                            <input type="text" name="details" class="form-control" required>
+                            <input type="text" name="details" class="form-control" required value="{{old('details')}}">
                         </div>
                     </div>
                 </div>
@@ -38,7 +47,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="">Price</label>
-                            <input type="text" id="price" name="price" class="form-control" required>
+                            <input type="text" id="price" name="price" class="form-control" required >
                         </div>
                         <div class="col-md-4">
                             <label for="name">Currency</label>
@@ -88,7 +97,7 @@
                         <div class="col-md-2">
                             <label for="name">Measure</label>
                             <select name="measure" id="measure" class="form-control measure" required>
-                                <option value="sqt">Foot</option>
+                                <option value="sqt">Feet</option>
                                 <option value="sqm">Metre</option>
                             </select>
                         </div>

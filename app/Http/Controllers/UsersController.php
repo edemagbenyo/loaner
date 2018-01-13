@@ -6,6 +6,9 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Hash;
+use Carbon\Carbon;
+
 
 class UsersController extends Controller
 {
@@ -22,6 +25,7 @@ class UsersController extends Controller
     public function index()
     {
         //
+        
 
         if (Auth::user()->email == 'superuser@lhost.com'):
             $users = User::all();
@@ -137,5 +141,51 @@ class UsersController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+    * Change Password
+    *
+    **/
+    public function changePassword(){
+        $user = Auth::user();
+        return view('users/change-password', compact(['user']));
+    }
+
+
+    /**
+    * Update password
+    *
+    **/
+    public function updatePassword(Request $request){
+
+        $this->validate($request,[
+            'current_password' => 'required',
+            'password' => 'required|confirmed|min:6',
+        ]);
+         // Checking current password
+        if (!Hash::check($request->current_password, $request->user()->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'Current password is not correct']);
+        }
+ 
+        $request->user()->update([
+            'password' => bcrypt($request->password),
+        ]);
+        
+        Auth::logout();
+        return redirect()->route('login')->withErrors(['message' => 'Password changed! Kindly log in with the new password']);
+
+    }
+
+    /**
+    * Reset password
+    *
+    **/
+    public function resetPassword( Request $request){
+        $user = User::find($request->user_id);
+        $user->update([
+            'password' => bcrypt('123456')
+        ]);
+        return redirect()->back()->with(['message' => $user->name.' password has been reset.']);       
     }
 }

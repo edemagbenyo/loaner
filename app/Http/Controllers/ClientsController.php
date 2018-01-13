@@ -51,10 +51,10 @@ class ClientsController extends Controller
             'name' => 'required|max:255',
             'email' => 'email|max:255',
             'contact' => 'required',
-            'location' => 'required',
+            'location' => 'max:255',
             'address' => 'required',
             'organization' => '',
-            'residence' => 'required',
+            'residence' => '',
             'house' => '',
         ]);
         Client::create($request->all());

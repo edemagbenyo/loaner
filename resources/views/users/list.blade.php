@@ -50,12 +50,24 @@
                                 <div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
                                     @if(Auth::user()->can(["manage-users","edit-users"]))
                                         <a class="btn btn-default" href="{{route('users.edit',$user->id)}}">Edit</a>
+                                        <a class="btn btn-warning" href="#" onclick="event.preventDefault(); 
+                                            document.getElementById('reset-form').submit();">Reset Password</a>
                                     @endif
+                                    {{--  @if(Auth::user()->can(["manage-users","delete-users"]))
+                                     @if($user->id != Auth::user()->id)    
+                                        <a class="btn btn-warning" href="{{route('users.edit',$user->id)}}">Block</a>
+                                     @endif
+                                    @endif  --}}
                                     @if(Auth::user()->can(["manage-users","delete-users"]))
                                         @if($user->id != Auth::user()->id)
                                             <a class="btn btn-danger">Delete</a>
                                         @endif
                                     @endif
+                                    <form id="reset-form" action="{{ route('resetpassword') }}" method="POST"
+                                          style="display: none;">
+                                          <input type="hidden" name="user_id"value="{{$user->id}}">
+                                        {{ csrf_field() }}
+                                    </form>
                                 </div>
                             </td>
                         </tr>

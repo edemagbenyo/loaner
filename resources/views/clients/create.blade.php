@@ -11,7 +11,7 @@
             <form action="{{route('clients.store')}}" method="post" class="form-horizontal">
                 {{csrf_field()}}
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                    <label for="name" class="control-label">Name</label>
+                    <label for="name" class="control-label">Name*</label>
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                     <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required
                            autofocus>
@@ -23,7 +23,7 @@
                     @endif
                 </div>
                 <div class="form-group{{ $errors->has('organization') ? ' has-error' : '' }}">
-                    <label for="organization" class="control-label">Organization</label>
+                    <label for="organization" class="control-label">Organization*</label>
 
                     <input id="organization" type="text" class="form-control" name="organization"
                            value="{{ old('organization') }}" required>
@@ -35,7 +35,7 @@
                     @endif
                 </div>
                 <div class="form-group{{ $errors->has('contact') ? ' has-error' : '' }}">
-                    <label for="contact" class="control-label">Contact</label>
+                    <label for="contact" class="control-label">Contact*</label>
 
                     <input id="contact" type="text" class="form-control" name="contact" value="{{ old('contact') }}"
                            required>
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                    <label for="address" class="control-label">Address</label>
+                    <label for="address" class="control-label">Address*</label>
 
                     <input id="address" type="address" class="form-control" name="address" value="{{ old('address') }}"
                            required>
@@ -71,10 +71,10 @@
                     @endif
                 </div>
                 <div class="form-group{{ $errors->has('location') ? ' has-error' : '' }}">
-                    <label for="location" class="control-label">Location</label>
+                    <label for="location" class="control-label">Location*</label>
 
                     <input id="location" type="location" class="form-control" name="location" value="{{ old('location') }}"
-                           required>
+                           >
 
                     @if ($errors->has('location'))
                         <span class="help-block">
@@ -83,7 +83,7 @@
                     @endif
                 </div>
                 <div class="form-group{{ $errors->has('residence') ? ' has-error' : '' }}">
-                    <label for="residence" class="control-label">Residence</label>
+                    <label for="residence" class="control-label">Residence*</label>
 
                     <input id="residence" type="residence" class="form-control" name="residence"
                            value="{{ old('residence') }}"
