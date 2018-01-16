@@ -27,8 +27,13 @@ class CallsController extends Controller
     public function index()
     {
         //
+        if(Auth::user()->hasRole('admin')){
+            $calls = Call::orderBy('updated_at','desc')->get();
+        }else{
+            $calls = Call::where(['user_id'=>Auth::user()->id])->orderBy('updated_at','desc')->get();
+        }
 
-        return view('calls.index',['calls'=>Call::orderBy('updated_at','desc')->get(),'clients'=>Client::all()]);
+        return view('calls.index',['calls'=>$calls,'clients'=>Client::all()]);
     }
 
     /**

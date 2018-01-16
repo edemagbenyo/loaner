@@ -75,7 +75,7 @@ class UsersController extends Controller
         if (count($user)) {
             $user->attachRole($request->role);
         }
-
+        return redirect()->route('users.index');
     }
 
     /**
@@ -182,6 +182,7 @@ class UsersController extends Controller
     *
     **/
     public function resetPassword( Request $request){
+        dd($request->all());
         $user = User::find($request->user_id);
         $user->update([
             'password' => bcrypt('123456')

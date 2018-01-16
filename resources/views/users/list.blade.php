@@ -50,8 +50,8 @@
                                 <div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
                                     @if(Auth::user()->can(["manage-users","edit-users"]))
                                         <a class="btn btn-default" href="{{route('users.edit',$user->id)}}">Edit</a>
-                                        <a class="btn btn-warning" href="#" onclick="event.preventDefault(); 
-                                            document.getElementById('reset-form').submit();">Reset Password</a>
+                                        {{--  <a class="btn btn-warning" href="#" onclick="event.preventDefault(); 
+                                            document.getElementById('reset-form').submit();">Reset Password</a>  --}}
                                     @endif
                                     {{--  @if(Auth::user()->can(["manage-users","delete-users"]))
                                      @if($user->id != Auth::user()->id)    
