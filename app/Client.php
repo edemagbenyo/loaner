@@ -38,7 +38,9 @@ class Client extends Model
     {
         $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
         $paid = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->sum('amount');
-
+        if($total == 0){
+            $total = 1;
+        }
         return number_format(($paid/$total) * 100 , 2)."%";
     }
     public function balance()
