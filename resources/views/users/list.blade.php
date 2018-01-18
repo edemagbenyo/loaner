@@ -15,7 +15,7 @@
                 {{session('message')}}
             </div>
         @endif
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             <h3>List of Users</h3>
             <table class="table table-bordered datatable">
                 <thead>
@@ -46,7 +46,7 @@
                                     N/A
                                 @endif
                             </td>
-                            <td>
+                            <td width="34%">
                                 <div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
                                     @if(Auth::user()->can(["manage-users","edit-users"]))
                                         <a class="btn btn-default" href="{{route('users.edit',$user->id)}}">Edit</a>
