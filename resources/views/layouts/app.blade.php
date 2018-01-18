@@ -165,6 +165,16 @@
         $('#queryCash').DataTable();
         $('.datatable').DataTable();
 
+
+        var btn_rst = $('.reset-btn');
+        var frm_rst = $('#reset-form');
+        var user_id = $('#user_id');
+        btn_rst.on('click',function(){
+            $this = $(this);
+            
+            user_id.val($this.data('user-id'))
+            frm_rst.submit();
+        });
     });
 </script>
 </body>

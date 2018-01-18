@@ -182,7 +182,6 @@ class UsersController extends Controller
     *
     **/
     public function resetPassword( Request $request){
-        dd($request->all());
         $user = User::find($request->user_id);
         $user->update([
             'password' => bcrypt('123456')

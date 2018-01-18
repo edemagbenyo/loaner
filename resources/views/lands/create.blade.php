@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <select name="measure" id="measure" class="form-control measure" required>
-                                <option value="sqt">Foot</option>
+                                <option value="sqt">Feet</option>
                                 <option value="sqm">Metre</option>
                             </select>
                         </div>

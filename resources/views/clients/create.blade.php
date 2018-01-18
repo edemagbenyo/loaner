@@ -23,7 +23,7 @@
                     @endif
                 </div>
                 <div class="form-group{{ $errors->has('organization') ? ' has-error' : '' }}">
-                    <label for="organization" class="control-label">Organization*</label>
+                    <label for="organization" class="control-label">Organization/Occupation*</label>
 
                     <input id="organization" type="text" class="form-control" name="organization"
                            value="{{ old('organization') }}" required>
