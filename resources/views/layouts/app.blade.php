@@ -100,7 +100,7 @@
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" class="{{Request::segment(1) == 'home' ? 'active': ''}}"><a
                                         href="{{url('home')}}">@lang('menu.das') </a></li>
-                            @if(Auth::user()->can("*accounts"))
+                            @if(Auth::user()->can(["*accounts","make-sales","cash","view-accounts-clients","view-accounts-suppliers","view-accounts-lands"]))
                                 <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a
                                             href="{{route('accounts.index')}}">@lang('menu.acc')</a></li>
                             @endif
