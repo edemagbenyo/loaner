@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>L-Host Engineering</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -91,13 +91,11 @@
                     }
                     .bgb{
                         background: url({{asset('img/g.jpg')}});
-                        background-size:cover;
+                        /* background-size:cover; */
                     }
                 </style>
                 <div class="links">
-                    <a href="">Accounting</a>
-                    <a href="">Clients</a>
-                    <a href="">Payrolll</a>
+                    <a href="">EMPOWERMENT UNION</a>
                 </div>
             </div>
         </div>
