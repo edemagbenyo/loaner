@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Land extends Model
+class Loan extends Model
 {
     //
     use SoftDeletes;
@@ -16,7 +16,7 @@ class Land extends Model
      */
     protected $dates = ['deleted_at'];
 
-    protected  $guarded = ['id','payment'];
+    protected  $guarded = ['id'];
 
     public function percentSold()
     {

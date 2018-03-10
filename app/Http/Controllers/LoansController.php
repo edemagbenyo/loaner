@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Cashbook;
-use App\Land;
+use App\Loan;
 use App\Supplier;
 use App\SupplierAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LandsController extends Controller
+class LoansController extends Controller
 {
     /**
      * LandsController constructor.
@@ -39,7 +39,7 @@ class LandsController extends Controller
     public function create()
     {
         //
-        return view('lands.create',['suppliers'=>Supplier::all()]);
+        return view('loans.application',['suppliers'=>Supplier::all()]);
     }
 
     /**

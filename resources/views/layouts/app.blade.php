@@ -100,17 +100,17 @@
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" class="{{Request::segment(1) == 'home' ? 'active': ''}}"><a
                                         href="{{url('home')}}">@lang('menu.das') </a></li>
-                            @if(Auth::user()->can(["*accounts","make-sales","cash","view-accounts-clients","view-accounts-suppliers","view-accounts-lands"]))
+                            @if(Auth::user()->can(["*accounts","make-sales","cash","view-accounts-clients","view-accounts-suppliers","view-accounts-loans"]))
                                 <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a
-                                            href="{{route('accounts.index')}}">@lang('menu.acc')</a></li>
+                                            href="#">@lang('menu.acc')</a></li>
                             @endif
                             @if(Auth::user()->can("*clients"))
                                 <li role="presentation" class="{{Request::segment(1) == 'clients' ? 'active': ''}}"><a
-                                            href="{{route('clients.index')}}">Clients</a></li>
+                                            href="{{route('clients.index')}}">Members</a></li>
                             @endif
-                            @if(Auth::user()->can("*lands"))
-                                <li role="presentation" class="{{Request::segment(1) == 'lands' ? 'active': ''}}"><a
-                                            href="{{route('lands.index')}}">Lands</a></li>
+                            @if(Auth::user()->can("*loans"))
+                                <li role="presentation" class="{{Request::segment(1) == 'loans' ? 'active': ''}}"><a
+                                            href="{{route('loans.index')}}">Loans</a></li>
                             @endif
                             @if(Auth::user()->can("*calls"))
                                 <li role="presentation" class="{{(Request::segment(1) == 'calls'|| Request::segment(1) == 'users-calls' || Request::segment(1) == 'user-calls') ? 'active': ''}}"><a

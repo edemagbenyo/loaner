@@ -8,7 +8,7 @@
 @section('account-content')
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <h3>Lands Status</h3>
+            <h3>Loans Status</h3>
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -19,14 +19,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if(isset($lands) && count($lands))
-                    @foreach($lands as $land)
+                @if(isset($loans) && count($loans))
+                    @foreach($loans as $loan)
                             <tr>
-                                <td>{{$land->name}}</td>
+                                <td>{{$loan->name}}</td>
                                 <td>
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{$land->percentSold()}}">
-                                            {{$land->percentSold()}}
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{$loan->percentSold()}}">
+                                            {{$loan->percentSold()}}
                                         </div>
                                     </div>
                                 </td>
@@ -35,7 +35,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="3">No land yet.</td>
+                        <td colspan="3">No loan yet.</td>
                     </tr>
                 @endif
                 </tbody>

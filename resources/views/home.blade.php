@@ -1,26 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Welcome to L-Host Management System.</h1>
+    <h1 style="text-align:center">Welcome to Global Evangelical Church <br> Empowerment Union.</h1>
     <div class="row">
-        @if(Auth::user()->can("*calls"))
-            <div class="col-md-3">
-                <a class="btn btn-lg btn-info" href="{{route('calls.index')}}">Call Center</a>
+        @if(Auth::user()->can("*accounts"))
+            <div class="col-md-3 btn btn-info">
+                Total number of members
+                <br>
+                100
             </div>
         @endif
         @if(Auth::user()->can("*accounts"))
-            <div class="col-md-3">
-                <a class="btn btn-lg btn-success" href="{{route('accounts.index')}}">Accounting</a>
+            <div class="col-md-3 btn btn-success">
+                Total amount of withdrawal today
+                <br>
+                Ghc: 0.00
             </div>
         @endif
-        @if(Auth::user()->can("*clients"))
-            <div class="col-md-3">
-                <a class="btn btn-lg btn-warning" href="{{route('clients.index')}}">Clients</a>
+        @if(Auth::user()->can("*accounts"))
+            <div class="col-md-3  btn btn-danger">
+                Total amount of deposit today
+                <br>
+                Ghc: 0.00
             </div>
         @endif
-        @if(Auth::user()->can("*lands"))
-            <div class="col-md-3">
-                <a class="btn btn-lg btn-danger" href="{{route('lands.index')}}">Lands</a>
+        @if(Auth::user()->can("*accounts"))
+            <div class="col-md-3  btn btn-warning">
+                Total amount of loan paid today
+                <br>
+                Ghc: 0.00
             </div>
         @endif
     </div>

@@ -95,7 +95,7 @@
                     }
                 </style>
                 <div class="links">
-                    <a href="">EMPOWERMENT UNION</a>
+                    <a href="{{url('home')}}">EMPOWERMENT UNION</a>
                 </div>
             </div>
         </div>

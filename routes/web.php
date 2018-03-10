@@ -46,7 +46,7 @@ Route::get('api/client', [
 Route::resource('suppliers', 'SuppliersController');
 
 //Suppliers routes
-Route::resource('lands', 'LandsController');
+Route::resource('loans', 'LoansController');
 
 //Users calls
 Route::get('users-calls',[
@@ -147,11 +147,11 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'uses'=>'AccountsController@viewSupplierAccount'
     ]);
 
-    //Lands Status
+    //loans Status
     //Clients accounts
-    Route::get('lands', [
-        'as' => 'accounts.lands',
-        'uses' => 'AccountsController@landStatus'
+    Route::get('loans', [
+        'as' => 'accounts.loans',
+        'uses' => 'AccountsController@loanstatus'
     ]);
 
 });

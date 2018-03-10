@@ -44,8 +44,10 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->increments('id');
             $table->string('clientid')->unique();
             $table->string('account_id');
+            $table->enum('title',['Dr','Mr','Mrs','Ms']);
             $table->string('lname',255);
             $table->string('fname',255);
+            $table->string('oname',255)->nullable();
             $table->string('telephone1',255);
             $table->string('telephone2',255)->nullable();
             $table->string('paddress');

@@ -20,24 +20,24 @@ class Client extends Model
 
     public function account()
     {
-        return $this->hasMany('App\ClientAccount','client_id');
+        return $this->hasMany('App\Account','client_id');
     }
 
     public function total ()
     {
 
-        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
+        return $this->hasMany('App\Account','client_id')->where(['type'=>'d'])->sum('amount');
     }
     public function paid ()
     {
 
-        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->sum('amount');
+        return $this->hasMany('App\Account','client_id')->where(['type'=>'c'])->sum('amount');
     }
 
     public function percentPaid ()
     {
-        $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
-        $paid = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->sum('amount');
+        $total = $this->hasMany('App\Account','client_id')->where(['type'=>'d'])->sum('amount');
+        $paid = $this->hasMany('App\Account','client_id')->where(['type'=>'c'])->sum('amount');
         if($total == 0){
             $total = 1;
         }
@@ -45,10 +45,10 @@ class Client extends Model
     }
     public function balance()
     {
-        $account = $this->hasMany('App\ClientAccount','client_id');
+        $account = $this->hasMany('App\Account','client_id');
 
         $paid = $account->where(['type'=>'c'])->sum('amount');
-        $total = $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'d'])->sum('amount');
+        $total = $this->hasMany('App\Account','client_id')->where(['type'=>'d'])->sum('amount');
         $balance = $total - $paid;
 
         return number_format($balance);
@@ -56,6 +56,6 @@ class Client extends Model
 
     public function lastPayment()
     {
-        return $this->hasMany('App\ClientAccount','client_id')->where(['type'=>'c'])->orderBy('created_at','desc')->first();
+        return $this->hasMany('App\Account','client_id')->where(['type'=>'c'])->orderBy('created_at','desc')->first();
     }
 }

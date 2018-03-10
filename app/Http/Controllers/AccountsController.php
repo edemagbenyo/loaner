@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Cashbook;
 use App\Client;
 use App\ClientAccount;
-use App\Land;
+use App\Loan;
 use App\Sale;
 use App\Supplier;
 use Carbon\Carbon;
@@ -18,7 +18,7 @@ class AccountsController extends Controller
 
     public function index()
     {
-        return view('accounts.sales', ['clients' => Client::all(), 'lands' => Land::all()]);
+        return view('accounts.sales', ['clients' => Client::all(), 'Loans' => Loan::all()]);
     }
 
     /**
@@ -33,7 +33,7 @@ class AccountsController extends Controller
         $debit = Cashbook::where('type', 'd')->sum('amount');
         $open = $credit - $debit;
 
-        return view('accounts.cash-book', ['clients' => Client::all(), 'lands' => Land::all(),'open'=>$open]);
+        return view('accounts.cash-book', ['clients' => Client::all(), 'Loans' => Loan::all(),'open'=>$open]);
     }
 
     /**
@@ -107,7 +107,7 @@ class AccountsController extends Controller
                 'type'=>$request->type,
                 'currency'=>$request->currency,
                 'user_id'=>Auth::user()->id,
-                'land_id'=>0,
+                'Loan_id'=>0,
             ]);
         }else{
             Cashbook::create([
@@ -129,12 +129,12 @@ class AccountsController extends Controller
     public function postSales(Request $request)
     {
         $message=[
-            'land_id.required'=>"Kindly select a land and refill the information"
+            'Loan_id.required'=>"Kindly select a Loan and refill the information"
         ];
         //Validation
         $this->validate($request,[
             'client_id'=>'required',
-            'land_id'=>'required',
+            'Loan_id'=>'required',
         ],$message);
         //Create the sales
 
@@ -148,7 +148,7 @@ class AccountsController extends Controller
             'type'=>'d',
             'currency'=>$request->currency,
             'user_id'=>Auth::user()->id,
-            'land_id'=>$request->land_id,
+            'Loan_id'=>$request->Loan_id,
         ]);
 
         if($request->payment > 0){
@@ -156,11 +156,11 @@ class AccountsController extends Controller
             ClientAccount::create([
                 'client_id'=>$request->client_id,
                 'amount'=>$request->payment,
-                'details'=>'Payment for the land',
+                'details'=>'Payment for the Loan',
                 'type'=>'c',
                 'currency'=>$request->currency,
                 'user_id'=>Auth::user()->id,
-                'land_id'=>$request->land_id,
+                'Loan_id'=>$request->Loan_id,
             ]);
         }
         return redirect()->route('accounts.index')->with('message','Sales has been made');
@@ -205,9 +205,9 @@ class AccountsController extends Controller
         return view('accounts.suppliers.account',['supplier'=>Supplier::find($id)]);
     }
 
-    public function landStatus()
+    public function LoanStatus()
     {
-        return view('accounts.lands.index', ['lands' => Land::all()]);
+        return view('accounts.Loans.index', ['Loans' => Loan::all()]);
     }
 
 

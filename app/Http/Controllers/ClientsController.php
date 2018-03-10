@@ -47,16 +47,41 @@ class ClientsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'email' => 'email|max:255',
-            'contact' => 'required',
-            'location' => 'max:255',
-            'address' => 'required',
-            'organization' => '',
-            'residence' => '',
-            'house' => '',
+        //We create and account first before we create a client
+        Account::create([
+            'accountid'=>str_random(25),
+            'accountno'=>random_int(1000000000,9999999999),
+            'balance'=>'0.00',
+            'type'=>'saving',
+            'previous_balance'=>'0.00',
+            'user_id'=>Auth::user()->userid
+            ]);
+            
+            $this->validate($request, [
+                'title' => 'required',
+                'account_id'=>$account->accountid,
+                'clientid'=>str_random(20),
+                'fname' => 'required|max:255',
+                'lname' => 'required|max:255',
+                'oname' => 'max:255',
+                'email' => 'email|max:255',
+                'telephone1' => 'required',
+                'telephone2' => 'required',
+                'paddress' => 'required|max:255',
+                'raddress' => 'required|max:255',
+                'pob' => 'required|max:255',
+                'dob' => 'required|max:255',
+                'sex' => 'required|max:255',
+                'marital' => 'required|max:255',
+                'profession' => 'required|max:255',
+                'spousename' => 'required|max:255',
+                'spousetel' => 'required|max:255',
+                'user_id'=>Auth::user()->userid
         ]);
+
+
+            
+    
         Client::create($request->all());
         return redirect()->route('clients.index')->with('message',$request->name.' has been created successfully');
     }
@@ -108,25 +133,41 @@ class ClientsController extends Controller
     {
         //
         $this->validate($request, [
-            'name' => 'required|max:255',
+            'title' => 'required',
+            'fname' => 'required|max:255',
+            'lname' => 'required|max:255',
+            'oname' => 'max:255',
             'email' => 'email|max:255',
-            'contact' => 'required',
-            'location' => 'required',
-            'address' => 'required',
-            'organization' => '',
-            'residence' => 'required',
-            'house' => '',
+            'telephone1' => 'required',
+            'telephone2' => 'required',
+            'paddress' => 'required|max:255',
+            'raddress' => 'required|max:255',
+            'pob' => 'required|max:255',
+            'dob' => 'required|max:255',
+            'sex' => 'required|max:255',
+            'marital' => 'required|max:255',
+            'profession' => 'required|max:255',
+            'spousename' => 'required|max:255',
+            'spousetel' => 'required|max:255',
         ]);
 
         $client = Client::find($id);
-        $client->name= $request->name;
-        $client->contact= $request->contact;
+        $client->title= $request->title;
+        $client->fname= $request->fname;
+        $client->lname= $request->lname;
+        $client->oname= $request->oname;
         $client->email= $request->email;
-        $client->address= $request->address;
-        $client->location= $request->location;
-        $client->residence= $request->residence;
-        $client->house= $request->house;
-        $client->organization= $request->organization;
+        $client->telephone1= $request->telephone1;
+        $client->telephone2= $request->telephone2;
+        $client->paddress= $request->paddress;
+        $client->raddress= $request->raddress;
+        $client->pob= $request->pob;
+        $client->dob= $request->dob;
+        $client->sex= $request->sex;
+        $client->marital= $request->marital;
+        $client->profession= $request->profession;
+        $client->spousename= $request->spousename;
+        $client->spousetel= $request->spousetel;
         $client->user_id = Auth::user()->id;
 
         $client->save();

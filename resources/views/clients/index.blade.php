@@ -16,13 +16,13 @@
             </div>
         @endif
         <div class="col-md-10 col-md-offset-1">
-            <h3>List of clients</h3>
+            <h3>List of members</h3>
             <table class="table table-bordered datatable">
                 <thead>
                 <tr>
                     <th with="50%">Name
                         @if(Auth::user()->can(["manage-clients","add-clients"]))
-                            <a href="{{route('clients.create')}}" class="pull-right">Add client <span
+                            <a href="{{route('clients.create')}}" class="pull-right">Add member <span
                                         class="glyphicon glyphicon-plus-sign"></span>
 
                             </a>
@@ -55,7 +55,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="3">No client yet.</td>
+                        <td colspan="3">No member yet.</td>
                     </tr>
                 @endif
                 </tbody>
