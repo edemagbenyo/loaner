@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+use App\Account;
+use App\Nextofkin;
 
 class ClientsController extends Controller
 {
@@ -47,43 +49,76 @@ class ClientsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required',
+            'fname' => 'required|max:255',
+            'lname' => 'required|max:255',
+            'oname' => 'max:255',
+            'email' => 'email|max:255',
+            'telephone1' => 'required',
+            'paddress' => 'max:255',
+            'raddress' => 'max:255',
+            'pob' => 'required|max:255',
+            'dob' => 'required|max:255',
+            'sex' => 'required|max:255',
+            'marital' => 'required|max:255',
+            'profession' => 'required|max:255',
+            'spousename' => 'required|max:255',
+            'spousetel' => 'required|max:255',
+            'next_name' => 'required|max:255',
+            'next_tel1' => 'required|max:255',
+            'next_address' => 'required|max:255',
+            'relationship' => 'required|max:255',
+    ]);
         //We create and account first before we create a client
-        Account::create([
-            'accountid'=>str_random(25),
-            'accountno'=>random_int(1000000000,9999999999),
-            'balance'=>'0.00',
-            'type'=>'saving',
-            'previous_balance'=>'0.00',
+        $account = Account::create([
+        'accountid'=>str_random(25),
+        'accountno'=>random_int(100000,9999999),
+        'balance'=>'0.00',
+        'type'=>'saving',
+        'previous_balance'=>'0.00',
+        'user_id'=>Auth::user()->userid
+        ]);
+        
+        if($account){
+        //Create a new member
+        $client = Client::create([
+            'clientid'=>str_random(20),
+            'account_id'=>$account->accountid,
+            'title'=>$request->title,
+            'lname'=>$request->lname,
+            'fname'=>$request->fname,
+            'oname'=>$request->oname,
+            'telephone1'=>$request->telephone1,
+            'telephone2'=>$request->telephone2,
+            'paddress'=>$request->paddress,
+            'raddress'=>$request->raddress,
+            'pob'=>$request->pob,
+            'dob'=>$request->dob,
+            'sex'=>$request->sex,
+            'marital'=>$request->marital,
+            'profession'=>$request->profession,
+            'spousename'=>$request->spousename,
+            'spousetel'=>$request->spousetel,
             'user_id'=>Auth::user()->userid
-            ]);
             
-            $this->validate($request, [
-                'title' => 'required',
-                'account_id'=>$account->accountid,
-                'clientid'=>str_random(20),
-                'fname' => 'required|max:255',
-                'lname' => 'required|max:255',
-                'oname' => 'max:255',
-                'email' => 'email|max:255',
-                'telephone1' => 'required',
-                'telephone2' => 'required',
-                'paddress' => 'required|max:255',
-                'raddress' => 'required|max:255',
-                'pob' => 'required|max:255',
-                'dob' => 'required|max:255',
-                'sex' => 'required|max:255',
-                'marital' => 'required|max:255',
-                'profession' => 'required|max:255',
-                'spousename' => 'required|max:255',
-                'spousetel' => 'required|max:255',
-                'user_id'=>Auth::user()->userid
         ]);
 
-
+       if($client){
+            //Add next of kin
+                Nextofkin::create([
+                    'nextofkin'=>str_random(20),
+                    'client_id'=>$client->clientid,
+                    'name'=>$request->next_name,
+                    'telephone1'=>$request->next_tel1,
+                    'address'=>$request->next_address,
+                    'relationship'=>$request->relationship,
+                    'user_id'=>Auth::user()->userid
+                ]);
+            }
+        }
             
-    
-        Client::create($request->all());
-        return redirect()->route('clients.index')->with('message',$request->name.' has been created successfully');
+        return redirect()->route('clients.index')->with('message','Account has been created successfully');
     }
 
     /**

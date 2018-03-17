@@ -3,12 +3,12 @@
 
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h3 style="text-align: center;">Create a new land <a href="{{route('lands.index')}}" class="pull-right">List
-                    lands <span
+            <h3 style="text-align: center;">Create a new loan <a href="{{route('loans.index')}}" class="pull-right">List
+                    loans <span
                             class="glyphicon glyphicon-plus-sign"></span>
                 </a></h3>
 
-            <form action="{{route('lands.store')}}" method="post" class="form-horizontal">
+            <form action="{{route('loans.store')}}" method="post" class="form-horizontal">
                 {{csrf_field()}}
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name" class="control-label">Name</label>
@@ -23,7 +23,7 @@
                     @endif
                 </div>
                 <div class="form-group">
-                    <label for="">Land size</label>
+                    <label for="">Loan size</label>
 
                     <div class="row">
                         <div class="col-md-4">
@@ -128,13 +128,6 @@
                 </div>
                 <div class="form-group{{ $errors->has('supplier_id') ? ' has-error' : '' }}">
                     <label for="supplier_id" class="control-label">Supplier</label>
-
-                    <select name="supplier_id" id="" class="form-control">
-                        <option value="">Select a supplier</option>
-                        @foreach($suppliers as $sup)
-                            <option value="{{$sup->id}}">{{$sup->name}}</option>
-                        @endforeach
-                    </select>
 
                     @if ($errors->has('supplier_id'))
                         <span class="help-block">

@@ -28,7 +28,7 @@
                             </a>
                         @endif
                     </th>
-                    <th width="30%">Organization</th>
+                    <th width="30%">Account no. </th>
                     <th width="20%">Options</th>
                 </tr>
                 </thead>
@@ -36,8 +36,8 @@
                 @if(isset($clients) && count($clients))
                     @foreach($clients as $client)
                         <tr>
-                            <td>{{$client->name}}</td>
-                            <td>{{$client->organization}}
+                            <td>{{$client->fname . ' '. $client->lname}}</td>
+                            <td>{{$client->account->accountno}}
                             </td>
                             <td>
                                 @if(Auth::user()->can(["manage-clients","edit-clients"]))

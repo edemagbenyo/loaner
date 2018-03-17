@@ -20,7 +20,7 @@ class Client extends Model
 
     public function account()
     {
-        return $this->hasMany('App\Account','client_id');
+        return $this->belongsTo('App\Account','account_id','accountid');
     }
 
     public function total ()

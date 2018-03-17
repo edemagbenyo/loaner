@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'G.E.C. Empowerment Union ',
+    'name' => 'G.E.C. Union ',
 
     /*
     |--------------------------------------------------------------------------

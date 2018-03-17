@@ -10,13 +10,13 @@
             </div>
         @endif
         <div class="col-md-10 col-md-offset-1">
-            <h3>List of lands</h3>
+            <h3>Loan applications</h3>
             <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>Name
-                        @if(Auth::user()->can(["manage-lands","add-lands"]))
-                            <a href="{{route('lands.create')}}" class="pull-right">Add land <span
+                        @if(Auth::user()->can(["manage-loans","add-loans"]))
+                            <a href="{{route('loans.create')}}" class="pull-right">Add loan <span
                                         class="glyphicon glyphicon-plus-sign"></span>
 
                             </a>
@@ -27,18 +27,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if(isset($lands) && count($lands))
-                    @foreach($lands as $land)
+                @if(isset($loans) && count($loans))
+                    @foreach($loans as $loan)
                         <tr>
-                            <td>{{$land->name}}</td>
-                            <td>{{$land->location}}
+                            <td>{{$loan->name}}</td>
+                            <td>{{$loan->location}}
                             </td>
                             <td>
-                                @if(Auth::user()->can(["manage-lands","edit-lands"]))
-                                    <a class="btn btn-default" href="{{route('lands.edit',$land->id)}}">Edit</a>
+                                @if(Auth::user()->can(["manage-loans","edit-loans"]))
+                                    <a class="btn btn-default" href="{{route('loans.edit',$loan->id)}}">Edit</a>
                                 @endif
-                                @if(Auth::user()->can(["manage-lands","delete-lands"]))
-                                    {!! Form::open(['route' => ['lands.destroy', $land->id],'method'=>'post','id'=>'delete-land','style'=>'display:inline-block']) !!}
+                                @if(Auth::user()->can(["manage-loans","delete-loans"]))
+                                    {!! Form::open(['route' => ['loans.destroy', $loan->id],'method'=>'post','id'=>'delete-loan','style'=>'display:inline-block']) !!}
                                     <input name="_method" type="hidden" value="DELETE">
                                     <button class="btn btn-danger">Delete</button>
                                     {!! Form::close() !!}
@@ -49,7 +49,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="3">No land yet.</td>
+                        <td colspan="3">No loan yet.</td>
                     </tr>
                 @endif
                 </tbody>

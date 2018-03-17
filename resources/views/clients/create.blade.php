@@ -6,6 +6,11 @@
             <h3 style="text-align: center; text-weight:bold;">New member registration <a href="{{route('clients.index')}}" class="pull-right">List
                     members
                 </a></h3>
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    Check your form. There are some errors to fix.
+                </div>
+            @endif
 
             <form action="{{route('clients.store')}}" method="post" class="form-horizontal">
                 {{csrf_field()}}
@@ -28,7 +33,7 @@
                 </div></div>
                 </div>
                 <div class="form-group{{ $errors->has('lname') ? ' has-error' : '' }}">
-                    <label for="name" class="control-label">Surname*</label>
+                    <label for="lname" class="control-label">Surname*</label>
                     <input id="lname" type="text" class="form-control" name="lname" value="{{ old('lname') }}" required
                            autofocus>
 
@@ -98,15 +103,15 @@
                                     </span>
                     @endif
                 </div>
-                <div class="form-group{{ $errors->has('organization') ? ' has-error' : '' }}">
-                    <label for="organization" class="control-label">Residential Address</label>
+                <div class="form-group{{ $errors->has('raddress') ? ' has-error' : '' }}">
+                    <label for="raddress" class="control-label">Residential Address</label>
 
-                    <input id="organization" type="text" class="form-control" name="organization"
-                           value="{{ old('organization') }}" required>
+                    <input id="raddress" type="text" class="form-control" name="raddress"
+                           value="{{ old('raddress') }}" required>
 
-                    @if ($errors->has('organization'))
+                    @if ($errors->has('raddress'))
                         <span class="help-block">
-                                        <strong>{{ $errors->first('organization') }}</strong>
+                                        <strong>{{ $errors->first('raddress') }}</strong>
                                     </span>
                     @endif
                 </div>
@@ -136,7 +141,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group">
-                        <div class="col-md-6 {{ $errors->has('pob') ? ' has-error' : '' }}">
+                        <div class="col-md-6 {{ $errors->has('sex') ? ' has-error' : '' }}">
                             <label for="sex" class="control-label">Sex</label>
                             <select name="sex" id="sex" class="form-control">
                                 <option value="m">Male</option>
@@ -151,7 +156,7 @@
                         </div>
                         <div class="col-md-6 {{ $errors->has('marital') ? ' has-error' : '' }}">
                             <label for="title" class="control-label">Marital Status</label>
-                            <select name="sex" id="sex" class="form-control">
+                            <select name="marital" id="marital" class="form-control">
                                 <option value="s">Single</option>
                                 <option value="m">Married</option>
                                 <option value="d">Divorced</option>
@@ -166,15 +171,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group{{ $errors->has('profression') ? ' has-error' : '' }}">
-                    <label for="profression" class="control-label">Profession/Occupation*</label>
+                <div class="form-group{{ $errors->has('profession') ? ' has-error' : '' }}">
+                    <label for="profession" class="control-label">Profession/Occupation*</label>
 
-                    <input id="profression" type="text" class="form-control" name="profression" value="{{ old('profression') }}"
+                    <input id="profession" type="text" class="form-control" name="profession" value="{{ old('profession') }}"
                            required>
 
-                    @if ($errors->has('profression'))
+                    @if ($errors->has('profession'))
                         <span class="help-block">
-                                        <strong>{{ $errors->first('profression') }}</strong>
+                                        <strong>{{ $errors->first('profession') }}</strong>
                                     </span>
                     @endif
                 </div>
@@ -227,25 +232,25 @@
                                     </span>
                     @endif
                 </div>
-                <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                    <label for="address" class="control-label">Address</label>
+                <div class="form-group{{ $errors->has('next_address') ? ' has-error' : '' }}">
+                    <label for="next_address" class="control-label">next_Address</label>
 
-                    <input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}" >
+                    <input id="next_address" type="text" class="form-control" name="next_address" value="{{ old('next_address') }}" >
 
-                    @if ($errors->has('address'))
+                    @if ($errors->has('next_address'))
                         <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
+                                        <strong>{{ $errors->first('next_address') }}</strong>
                                     </span>
                     @endif
                 </div>
-                <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-                    <label for="address" class="control-label">Relationship</label>
+                <div class="form-group{{ $errors->has('relationship') ? ' has-error' : '' }}">
+                    <label for="relationship" class="control-label">Relationship</label>
 
-                    <input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}" >
+                    <input id="relationship" type="text" class="form-control" name="relationship" value="{{ old('relationship') }}" >
 
-                    @if ($errors->has('address'))
+                    @if ($errors->has('relationship'))
                         <span class="help-block">
-                                        <strong>{{ $errors->first('address') }}</strong>
+                                        <strong>{{ $errors->first('relationship') }}</strong>
                                     </span>
                     @endif
                 </div>

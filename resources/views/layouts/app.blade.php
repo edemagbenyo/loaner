@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'G.E.C.') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
@@ -45,8 +45,9 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                <a class="navbar-brand" href="{{ url('home') }}">
+                    {{ config('app.name', 'G.E.C. Union') }}
+                    <img src="{{asset('img/logo.jpg')}}" alt="" width=50 style="display:inline;">
                 </a>
             </div>
 
@@ -110,16 +111,13 @@
                             @endif
                             @if(Auth::user()->can("*loans"))
                                 <li role="presentation" class="{{Request::segment(1) == 'loans' ? 'active': ''}}"><a
-                                            href="{{route('loans.index')}}">Loans</a></li>
+                                            href="#">Loans</a></li>
                             @endif
-                            @if(Auth::user()->can("*calls"))
+                            @if(Auth::user()->can("*lands"))
                                 <li role="presentation" class="{{(Request::segment(1) == 'calls'|| Request::segment(1) == 'users-calls' || Request::segment(1) == 'user-calls') ? 'active': ''}}"><a
-                                            href="{{route('calls.index')}}">Call Center</a></li>
+                                            href="#">Call Center</a></li>
                             @endif
-                            @if(Auth::user()->can("*suppliers"))
-                                <li role="presentation" class="{{Request::segment(1) == 'suppliers' ? 'active': ''}}"><a
-                                            href="{{route('suppliers.index')}}">Suppliers</a></li>
-                            @endif
+                           
 
                             @if(Auth::user()->can("*users"))
                                 <li role="presentation" class="{{Request::segment(1) == 'users' ? 'active': ''}}"><a

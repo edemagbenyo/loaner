@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cashbook;
 use App\Loan;
-use App\Supplier;
+use App\Client;
 use App\SupplierAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +28,7 @@ class LoansController extends Controller
     public function index()
     {
         //
-        return view('lands.index',['lands'=>Land::all()]);
+        return view('loans.index',['loans'=>Loan::all()]);
     }
 
     /**
@@ -39,7 +39,7 @@ class LoansController extends Controller
     public function create()
     {
         //
-        return view('loans.application',['suppliers'=>Supplier::all()]);
+        return view('loans.create',['clients'=>Client::all()]);
     }
 
     /**
@@ -99,7 +99,7 @@ class LoansController extends Controller
 
         }
 
-        return redirect()->route('lands.index')->with('message',$request->name.' has been created successfully');
+        return redirect()->route('loans.index')->with('message',$request->name.' has been created successfully');
     }
 
     /**
@@ -122,7 +122,7 @@ class LoansController extends Controller
     public function edit($id)
     {
         //
-        return view('lands.edit',['land'=>Land::find($id) , 'suppliers'=>Supplier::all()]);
+        return view('loans.edit',['land'=>Land::find($id) , 'suppliers'=>Supplier::all()]);
 
     }
 
@@ -160,7 +160,7 @@ class LoansController extends Controller
 
         $land->save();
 
-        return redirect()->route('lands.index')->with('message',$request->name.' has been updated successfully');
+        return redirect()->route('loans.index')->with('message',$request->name.' has been updated successfully');
     }
 
     /**
@@ -174,7 +174,7 @@ class LoansController extends Controller
         //
 
         Land::find($id)->delete();
-        return redirect()->route('lands.index')->with('message','land has been deleted successfully');
+        return redirect()->route('loans.index')->with('message','land has been deleted successfully');
     }
 
 
