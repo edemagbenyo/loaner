@@ -92,7 +92,7 @@ $(function () {
         $close.val(balance);
     });
 
-    $('#amount').on('keyup',function(){
+    $('#asmount').on('keyup',function(){
         balance = closingBalance($transact.val(),$(this).val())
         $close.val(balance);
     });

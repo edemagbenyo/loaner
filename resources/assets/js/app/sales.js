@@ -1,29 +1,119 @@
 $(function () {
 
-    var price = $('#price');
-    var payment = $('#payment');
-    var balance = $('#balance');
-
-    price.on('keyup',function(){
-        balance.val(calculateBalance($(this).val(),payment.val()))
-    });
-
-    payment.on('keyup',function(){
-       balance.val(calculateBalance(price.val(),$(this).val()));
-    });
-
-
-    function calculateBalance(price, payment){
-        var balance = parseFloat(price) - parseFloat(payment);
-        return balance;
-    }
-
+    var converter = require('number-to-words');
+    //variables
+    $alert = $('.alert');
     $hidden_info = $('#hidden-data');
-    $open = $('#open');
-    $current = $('#current');
-    $.get($hidden_info.data('url'),{info_data:$hidden_info.data('date')},function(data){
-        $open.text(data.opening);
-        $current.text(data.current);
+    $repaymentperiod = $('#repaymentperiod');
+    $amount = $('#amount');
+    $totalpay = $('#totalpay');
+    $monthlypay = $('#monthlypay');
+    $purpose = $('#purpose');
+    $client = $('#client_set');
+    $savings_balance = $('#savings_balance');
+    $accno = $('#accno');
+    $amountinwords = $('#amountinwords');
+    
+    //On fresh reload
+    validate();
+    
+    
+    //If we come from validation error
+    calculateRepayment($repaymentperiod.val(), $amount.val());
+    
+    
+    //
+    $purpose.on('keyup',function(){
+        validate();
+    });
+    //Set the amount in words when amount changes or is not null
+    $amount.on('keyup',function(){
+        $this= $(this);
+        if ($this.val()) {
+            $amountinwords.val(converter.toWords($amount.val()) + " Ghana cedis");
+        } else {
+            $amountinwords.val("Check the amount");
+        }
+        
+        calculateRepayment($repaymentperiod.val(), $this.val());
+        
+        //Enable submit button if ready
+        validate();
+    });
+    
+    
+    //Set values and errors based on the selected member
+    $client.on('change',function(){
+        $this = $(this);
+        if($this.val()){
+            // console.log($this.val())
+            $.get($hidden_info.data('url'), { accountid:$this.val() },function(data){
+                
+                if(data.loan){
+                    $alert.show();
+                    $('#error').text("User has unpaid loan in progress")
+                }
+                console.log(data);
+                $savings_balance.val(data.balance);
+            })
+        }else{
+            //Hide the error div
+            $alert.hide();
+        }
+        //Enable submit button if ready
+        validate();
+    });
+    
+    
+    //calculate of repayment 
+    $repaymentperiod.on('change',function(){
+        $this= $(this);
+        calculateRepayment($this.val(),$amount.val());
+        
+        //Enable submit button if ready
+        validate();
     })
+    
+    function calculateRepayment(period,amount){
+        $interest = parseFloat(amount) * .20;
+        console.log($interest);
+        $total = (parseFloat(amount) + $interest).toFixed(2);
+        $totalpay.val($total);
+        if (period == '6months') {
+            $monthlypay.val($total / 6);
+        }
+        else if (period == '1year') {
+            $monthlypay.val($total / 12);
+        }
+    }
+    function validate(){
+        if ($amount.val() && $client.val() && $purpose.val() && $repaymentperiod.val()){
+            $('#submitit').attr('disabled',false);
+            
+            $amountinwords.val(converter.toWords($amount.val()) + " Ghana cedis");
+        } 
+    }
+    
+    
+    //Check guarantor
+    
+    
+    
+    
+    //TRANSACTION Handling
+    $members = $('#members');
+    $transactions = $('#transactions');
+    $acc_balance = $('#acc_balance');
+    $acc_balance = $('#acc_balance');
+    $loan_balance = $('#loan_balance');
 
+    //ON member change, let's update the account balance and the loan balance
+    $members.on('change',function(){
+        
+        
+    });
+    $transactions.on('change',function(){
+
+        console.log("Change of transactions");
+    });
 });

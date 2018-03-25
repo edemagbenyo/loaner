@@ -20,10 +20,10 @@
                     <label for="title" class="control-label">Title*</label>
                     <select name="title" id="title" class="form-control">
                         <option value="">Select title</option>
-                        <option value="Dr">Dr.</option>
-                        <option value="Mr">Mr.</option>
-                        <option value="Mrs">Mrs.</option>
-                        <option value="Ms">Ms.</option>
+                        <option value="Dr" {{(old('title') == 'Dr' ? 'selected': '')}}>Dr.</option>
+                        <option value="Mr"  {{(old('title') == 'Mr' ? 'selected': '')}}>Mr.</option>
+                        <option value="Mrs"  {{(old('title') == 'Mrs' ? 'selected': '')}}>Mrs.</option>
+                        <option value="Ms"  {{(old('title') == 'Ms' ? 'selected': '')}}>Ms.</option>
                     </select>
                     @if ($errors->has('title'))
                         <span class="help-block">
@@ -129,7 +129,7 @@
                         </div>
                         <div class="col-md-6 {{ $errors->has('dob') ? ' has-error' : '' }}">
                             <label for="title" class="control-label">Date of Birth</label>
-                            <input id="dob" type="text" class="form-control" name="dob" value="{{ old('dob') }}" required>
+                            <input id="datepicker" type="text" class="form-control" name="dob" value="{{ old('dob') }}" required>
 
                             @if ($errors->has('dob'))
                                 <span class="help-block">
@@ -144,9 +144,9 @@
                         <div class="col-md-6 {{ $errors->has('sex') ? ' has-error' : '' }}">
                             <label for="sex" class="control-label">Sex</label>
                             <select name="sex" id="sex" class="form-control">
-                                <option value="m">Male</option>
-                                <option value="f">Female</option>
-                                <option value="o">N/A</option>
+                                <option value="m" {{(old('sex') == 'm' ? 'selected': '')}}>Male</option>
+                                <option value="f" {{(old('sex') == 'f' ? 'selected': '')}} >Female</option>
+                                <option value="o" {{(old('sex') == 'o' ? 'selected': '')}}>N/A</option>
                             </select>
                             @if ($errors->has('sex'))
                                 <span class="help-block">
@@ -157,11 +157,11 @@
                         <div class="col-md-6 {{ $errors->has('marital') ? ' has-error' : '' }}">
                             <label for="title" class="control-label">Marital Status</label>
                             <select name="marital" id="marital" class="form-control">
-                                <option value="s">Single</option>
-                                <option value="m">Married</option>
-                                <option value="d">Divorced</option>
-                                <option value="w">Widow</option>
-                                <option value="o">N/A</option>
+                                <option value="s"  {{(old('marital') == 's' ? 'selected': '')}} >Single</option>
+                                <option value="m"  {{(old('marital') == 'm' ? 'selected': '')}}>Married</option>
+                                <option value="d" {{(old('marital') == 'd' ? 'selected': '')}}>Divorced</option>
+                                <option value="w" {{(old('marital') == 'w' ? 'selected': '')}}>Widow</option>
+                                <option value="o" {{(old('marital') == 'o' ? 'selected': '')}}>N/A</option>
                             </select>
                             @if ($errors->has('marital'))
                                 <span class="help-block">
@@ -233,7 +233,7 @@
                     @endif
                 </div>
                 <div class="form-group{{ $errors->has('next_address') ? ' has-error' : '' }}">
-                    <label for="next_address" class="control-label">next_Address</label>
+                    <label for="next_address" class="control-label">Address</label>
 
                     <input id="next_address" type="text" class="form-control" name="next_address" value="{{ old('next_address') }}" >
 

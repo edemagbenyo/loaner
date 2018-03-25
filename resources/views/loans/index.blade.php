@@ -22,7 +22,7 @@
                             </a>
                         @endif
                     </th>
-                    <th>Location</th>
+                    <th>Status</th>
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -30,8 +30,8 @@
                 @if(isset($loans) && count($loans))
                     @foreach($loans as $loan)
                         <tr>
-                            <td>{{$loan->name}}</td>
-                            <td>{{$loan->location}}
+                            <td>{{$loan->loanee->fname. ' ' .$loan->loanee->lname }}</td>
+                            <td>{{$loan->status}}
                             </td>
                             <td>
                                 @if(Auth::user()->can(["manage-loans","edit-loans"]))

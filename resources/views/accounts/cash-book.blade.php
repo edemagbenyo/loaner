@@ -10,9 +10,9 @@
                 </div>
             @endif
             <h5>
-                <a href="{{route('query.cashbook',['fixed'=>'today'])}}" class="btn btn-success">Today's book</a>
+                {{-- <a href="{{route('query.cashbook',['fixed'=>'today'])}}" class="btn btn-success">Today's book</a>
                 <a href="{{route('query.cashbook',['fixed'=>'yesterday'])}}" class="btn btn-info">Yesterday book</a>
-                <a href="{{route('query.cashbook',['fixed'=>'full'])}}" class="btn btn-danger">Entire book</a>
+                <a href="{{route('query.cashbook',['fixed'=>'full'])}}" class="btn btn-danger">Entire book</a> --}}
             </h5>
 
             <form action="{{route('accounts.post.cashbook')}}" method="post">
@@ -62,9 +62,9 @@
                         </div>
                         <div class="col-md-6">
                             <label for="">Open Balance</label>
-                            <input type="text" class="form-control" value="{{($open<0) ? '('.abs($open).')' :$open}}"
+                            <input type="text" class="form-control" value=""
                                    readonly>
-                            <input type="hidden" id="open" value="{{$open}}">
+                            <input type="hidden" id="open" value="">
                         </div>
                     </div>
                 </div>

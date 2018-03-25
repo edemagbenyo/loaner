@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cashbook;
 use App\Client;
-use App\ClientAccount;
+use App\Transaction;
 use App\Loan;
 use App\Sale;
 use App\Supplier;
@@ -21,21 +21,59 @@ class AccountsController extends Controller
         return view('accounts.sales', ['clients' => Client::all(), 'Loans' => Loan::all()]);
     }
 
+
     /**
-     * Either credit or debit the company account
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * Post a cash transaction
      */
-    public function cashbook()
+    public function postTransactions(Request $request)
     {
-        //Calculate the opening balance
-        $credit = Cashbook::where('type', 'c')->sum('amount');
-        $debit = Cashbook::where('type', 'd')->sum('amount');
-        $open = $credit - $debit;
 
-        return view('accounts.cash-book', ['clients' => Client::all(), 'Loans' => Loan::all(),'open'=>$open]);
+
+        $client = Client::where('account_id',$request->account_id)->first();
+        //calculate balance
+        $previous_balance = $client->account->balance;
+        $loan_balance = $client->account->loan_balance;
+
+        switch ($request->type) {
+            case 'deposit':
+                $balance = doubleval($previous_balance) + doubleval($request->amount);
+                break;
+            
+            case 'withdrawal':
+                $balance = doubleval($previous_balance) - doubleval($request->amount);
+                break;
+            
+            case 'lcredit':
+                $loan_balance = $loan_balance;
+                $balance = doubleval($loan_balance) + doubleval($request->amount); 
+                break;
+            
+            case 'ldebit':
+                
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        Transaction::create([
+            'transactionid'=>str_random(20),
+            'client_id'=>$client->clientid,
+            'account_id'=>$request->account_id,
+            'amount'=>$request->amount,
+            'balance'=>$balance,
+            'previous_balance'=> $previous_balance,
+            'type'=>$request->type,
+            'details'=>$request->details,
+            'depositor_name'=>$request->depositor_name,
+            'depositor_telephone'=>$request->depositor_telephone,
+            'depositor_date'=>$request->depositor_name,
+        ]);
+
+
+        return redirect()->route('accounts.cashbook')->with('message','Record has been saved');
     }
-
     /**
      * Get the sales for the specified date
      *
@@ -81,49 +119,6 @@ class AccountsController extends Controller
             return response()->json($data);
         }
 
-    }
-    /**
-     * Post a cash transaction
-     */
-    public function postCashbook(Request $request)
-    {
-        if(!empty($request->client_id)){
-            Cashbook::create([
-                'client_id'=>$request->client_id,
-                'amount'=>$request->amount,
-                'open'=>0,
-                'close'=>0,
-                'details'=>$request->details,
-                'type'=>$request->type,
-                'currency'=>$request->currency,
-                'user_id'=>Auth::user()->id
-            ]);
-
-            //Update the client account
-            ClientAccount::create([
-                'client_id'=>$request->client_id,
-                'amount'=>$request->amount,
-                'details'=>$request->details,
-                'type'=>$request->type,
-                'currency'=>$request->currency,
-                'user_id'=>Auth::user()->id,
-                'Loan_id'=>0,
-            ]);
-        }else{
-            Cashbook::create([
-                'client_id'=>$request->client_id, #this is supposed be client_id
-                'amount'=>$request->amount,
-                'open'=>0,
-                'close'=>0,
-                'details'=>$request->details,
-                'type'=>$request->type,
-                'currency'=>$request->currency,
-                'user_id'=>Auth::user()->id
-            ]);
-        }
-
-
-        return redirect()->route('accounts.cashbook')->with('message','Record has been saved');
     }
 
     public function postSales(Request $request)

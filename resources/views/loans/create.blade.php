@@ -3,18 +3,36 @@
 
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h3 style="text-align: center;">Create a new loan <a href="{{route('loans.index')}}" class="pull-right">List
-                    loans <span
-                            class="glyphicon glyphicon-plus-sign"></span>
-                </a></h3>
+            <h3 style="text-align: center; text-decoration:underline">
+            
+             New Loan Application   </h3>
+            <div class="alert alert-danger" style="display:none">
+                <p id="error"></p>
+            </div>
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form action="{{route('loans.store')}}" method="post" class="form-horizontal">
                 {{csrf_field()}}
+                <input type="hidden" id="hidden-data" data-url="{{url('accounts/loaninfo')}}">
+                <h3>Section A - Member information</h3>
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                    <label for="name" class="control-label">Name</label>
+                    <label for="name" class="control-label">Member name</label>
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required
-                           autofocus>
+                    <select name="account_id" id="client_set" class="form-control">
+                        <option value="">Select member</option>
+                        @foreach ($clients as $client)
+                            <option value="{{$client->account_id}}" {{(old('account_id') == $client->account_id ? 'selected': '')}}  >{{$client->lname.'  '.$client->fname . ' - '. $client->telephone1 . ' - no: ' .$client->account->accountno}}</option>
+                        @endforeach
+                    </select>
 
                     @if ($errors->has('name'))
                         <span class="help-block">
@@ -22,137 +40,128 @@
                                     </span>
                     @endif
                 </div>
+
+                            
+                <div class="form-group{{ $errors->has('amount') ? ' has-error' : '' }}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="amount" class="control-label">Amount</label>
+
+                            <input id="amount" type="number" class="form-control" name="amount"
+                                   value="{{old('amount')}}" required>
+
+                            @if ($errors->has('amount'))
+                                <span class="help-block">
+                                        <strong>{{ $errors->first('amount') }}</strong>
+                                    </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
-                    <label for="">Loan size</label>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <select name="measure" id="measure" class="form-control measure" required>
-                                <option value="sqt">Feet</option>
-                                <option value="sqm">Metre</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <input id="width" type="text" class="form-control width" placeholder="width"
-                                   required>
-                        </div>
-                        <div class="col-md-4">
-                            <input id="height" type="text" class="form-control height"
-                                   placeholder="height" required>
-                        </div>
-                    </div>
-
+                    <label for="amountinwords" class="control-label">Amount in word</label>
+                    <input id="amountinwords" name= "amountinwords" readonly type="text" class="form-control">
                 </div>
-                <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
-                    <label for="size" class="control-label">Dimension</label>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input id="size" type="text" name="size" class="form-control"
-                                   readonly required>
-                            @if ($errors->has('size'))
-                                <span class="help-block">
-                                        <strong>{{ $errors->first('size') }}</strong>
+                <div class="form-group{{ $errors->has('purpose') ? ' has-error' : '' }}">
+                    <label for="purpose" class="control-label">Purpose of loan</label>
+
+                    <textarea name="purpose" id="purpose" rows="3" class="form-control">{{old('purpose')}}</textarea>
+
+                    @if ($errors->has('purpose'))
+                        <span class="help-block">
+                                        <strong>{{ $errors->first('purpose') }}</strong>
                                     </span>
-                            @endif
-                        </div>
-
-                        <div class="col-md-6">
-                            <p><span class="unit"></span></p>
-                        </div>
-                    </div>
+                    @endif
                 </div>
-                <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="price" class="control-label">Price</label>
 
-                            <input id="price" type="text" class="form-control" name="price"
-                                   value="{{ old('price') }}" required>
+                <div class="form-group{{ $errors->has('repaymentperiod') ? ' has-error' : '' }}">
+                   <div class="row">
+                    <div class="col-md-6">
+                            <label for="repaymentperiod" class="control-label">Period of Repayment</label>
+                            <select id="repaymentperiod" class="form-control" name="repaymentperiod" required>
+                                <option value="">Select Payment period</option>
+                                {{-- <option value="1month">1 Month</option> --}}
+                                {{-- <option value="3months">3 Months</option> --}}
+                                <option value="6months" {{(old('repaymentperiod') == '6months' ? 'selected' : '')}}>6 Months</option>
+                                <option value="1year" {{(old('repaymentperiod') == '1year' ? 'selected' : '')}} >1 Year</option>
+                            </select>
 
-                            @if ($errors->has('price'))
+                            @if ($errors->has('repaymentperiod'))
                                 <span class="help-block">
-                                        <strong>{{ $errors->first('price') }}</strong>
+                                        <strong>{{ $errors->first('repaymentperiod') }}</strong>
                                     </span>
                             @endif
                         </div>
                         <div class="col-md-6">
-                            <label for="currency">Currency</label>
-                            <select name="currency" id="currency" class="form-control">
-                                <option value="g">Ghana Cedis</option>
-                                <option value="u">US Dollars</option>
-                                <option value="e">Euro</option>
-                            </select>
+                            <label for="currency">Other</label>
+                            <input type="text" class="form-control" name="repaymentperiod2">
+                        </div>
+                   </div>
+                </div>
+                <div class="form-group{{ $errors->has('amount') ? ' has-error' : '' }}">
+                    <div class="row">
+                
+                        <div class="col-md-6">
+                            <label for="currency">Amount to pay</label>
+                            <input id="totalpay" type="text" class="form-control" readonly >
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="currency">Monthly Payment</label>
+                            <input id="monthlypay" type="text" class="form-control" readonly >
+                            
                         </div>
                     </div>
                 </div>
-                <div class="form-group{{ $errors->has('payment') ? ' has-error' : '' }}">
-                    <label for="payment" class="control-label">Payment</label>
-
-                    <input id="payment" type="text" class="form-control" name="payment"
-                           value="{{ old('payment') }}" required>
-
-                    @if ($errors->has('payment'))
-                        <span class="help-block">
-                                        <strong>{{ $errors->first('payment') }}</strong>
-                                    </span>
-                    @endif
+                
+                <h3>Section B - Guarantors </h3> 
+                
+                @for($i=1; $i<=3; $i++)
+                <div class="form-group">
+                    <label for="">Guarantor *  </label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select name="guar{{$i}}" id="" class="form-control">
+                            <option value="">Select Guarantor</option>
+                                @foreach ($guarantors as $client)
+                                    <option value="{{$client->clientid}}">{{$client->lname.' - '.$client->fname}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input id="amount" type="text" name="amount{{$i}}" class="form-control width" placeholder="Amount">
+                        </div>
+                        <div class="col-md-4">
+                            <input id="height" type="text" class="form-control guarantor" name="date{{$i}}"
+                                   placeholder="Date" value="{{Carbon\Carbon::now()->toDateString()}}" required>
+                        </div>
+                    </div>
                 </div>
+            @endfor
 
-                <div class="form-group{{ $errors->has('location') ? ' has-error' : '' }}">
-                    <label for="location" class="control-label">Location</label>
+                <h3>Section C - Treasurers information</h3>
 
-                    <input id="location" type="text" class="form-control" name="location"
-                           value="{{ old('location') }}"
-                           required>
-
-                    @if ($errors->has('location'))
-                        <span class="help-block">
-                                        <strong>{{ $errors->first('location') }}</strong>
-                                    </span>
-                    @endif
+                <div class="form-group{{ $errors->has('repaymentperiod') ? ' has-error' : '' }}">
+                   <div class="row">
+                    <div class="col-md-4">
+                            <label >Member savings balance</label>
+                            <input type="text" readonly class="form-control" id="savings_balance" >
+                        </div>
+                        <div class="col-md-4">
+                            <label>Previous Loan balance</label>
+                            <input type="text" readonly class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label>Current of interest on loans</label>
+                            <input type="text" readonly class="form-control" value="20%">
+                            
+                        </div>
+                   </div>
                 </div>
-
-                <div class="form-group{{ $errors->has('date_purchased') ? ' has-error' : '' }}">
-                    <label for="date_purchased" class="control-label">Date Purchased</label>
-
-                    <input id="datepicker" type="date_purchased" class="form-control" name="date_purchased"
-                           value="{{ old('date_purchased') }}"
-                            >
-
-                    @if ($errors->has('date_purchased'))
-                        <span class="help-block">
-                                        <strong>{{ $errors->first('date_purchased') }}</strong>
-                                    </span>
-                    @endif
-                </div>
-                <div class="form-group{{ $errors->has('supplier_id') ? ' has-error' : '' }}">
-                    <label for="supplier_id" class="control-label">Supplier</label>
-
-                    @if ($errors->has('supplier_id'))
-                        <span class="help-block">
-                                        <strong>{{ $errors->first('supplier_id') }}</strong>
-                                    </span>
-                    @endif
-                </div>
-
-                <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-                    <label for="description" class="control-label">Details</label>
-
-                    <textarea name="description" id="" cols="30" rows="4"
-                              class="form-control">{{ old('description') }}</textarea>
-
-                    @if ($errors->has('description'))
-                        <span class="help-block">
-                                        <strong>{{ $errors->first('description') }}</strong>
-                                    </span>
-                    @endif
-                </div>
-
-
                 <div class="form-group">
                     <div style="margin-top: 10px;">
-                        <button type="submit" class="create btn btn-primary">
+                        <button type="submit" id="submitit" class="create btn btn-primary" disabled>
                             Create
                         </button>
                     </div>

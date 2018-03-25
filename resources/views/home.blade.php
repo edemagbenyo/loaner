@@ -7,7 +7,7 @@
             <div class="col-md-3 btn btn-info">
                 Total number of members
                 <br>
-                100
+                {{$members_count}}
             </div>
         @endif
         @if(Auth::user()->can("*accounts"))

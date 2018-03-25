@@ -18,10 +18,12 @@ class Loan extends Model
 
     protected  $guarded = ['id'];
 
-    public function percentSold()
-    {
-        $land =$this->size;
-        $sold = $this->hasMany('App\Sale','land_id')->sum('dimension');
-        return number_format(($sold/$land) * 100 , 2)."%";
+    /**
+    * Loanee
+    *
+    **/
+    public function loanee(){
+        return $this->belongsTo('App\Client','client_id','clientid');
     }
+   
 }

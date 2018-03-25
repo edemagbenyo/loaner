@@ -154,43 +154,10 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'uses' => 'AccountsController@loanstatus'
     ]);
 
-});
 
 
-//Settings Routes
-Route::group(['prefix' => 'departments', 'middleware' => 'auth'], function () {
 
-    Route::get('index', [
-        'as' => 'departments.index',
-        'uses' => 'DepartmentsController@index'
-    ]);
-    //Rooms Routes
-    Route::resource('rooms', 'Departments\RoomsController');
-    //View Rooms prices
-    Route::get('rooms/view/prices', [
-        'as' => 'rooms.view.prices',
-        'uses' => 'Departments\RoomsController@viewPrices'
-    ]);
-    //Set Room price
-    Route::get('rooms/set/price/{id}', [
-        'as' => 'room.set.price',
-        'uses' => 'Departments\RoomsController@setRoomPrice'
-    ]);
+    //API Route
+    Route::get('loaninfo','LoansController@loanInfo');
 
-    //Edit Room Price
-    Route::post('rooms/edit/price/{id}', [
-        'as' => 'rooms.edit.price',
-        'uses' => 'Departments\RoomsController@editRoomPrice'
-    ]);
-
-    //Save Room price
-    Route::post('rooms/post/price', [
-        'as' => 'room.post.price',
-        'uses' => 'Departments\RoomsController@postRoomPrice'
-    ]);
-    //Save Room price
-    Route::post('rooms/delete/price/{id}', [
-        'as' => 'room.delete.price',
-        'uses' => 'Departments\RoomsController@deleteRoomPrice'
-    ]);
 });

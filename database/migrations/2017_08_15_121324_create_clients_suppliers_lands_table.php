@@ -22,8 +22,9 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->string('accountid')->unique();
             $table->string('accountno');
             $table->double('balance',20,5);
-            $table->enum('type',['saving','current','credit','debit','other']);
+            $table->double('loan_balance',20,5);
             $table->double('previous_balance',20,5);
+            $table->enum('type',['saving','current','credit','debit','other']);
             $table->string('column1')->nullable();
             $table->string('column2')->nullable();
             $table->string('column3')->nullable();
@@ -56,6 +57,7 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->date('dob')->nullable();
             $table->enum('sex',['m','f','o']);
             $table->enum('marital',['m','s','d','w','o']);
+            $table->enum('guarantor',['valid','invalid']);
             $table->string('profession')->nullable();
             $table->string('spousename')->nullable();
             $table->string('spousetel')->nullable();
@@ -112,8 +114,10 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->double('balance',20,5);
             $table->double('previous_balance',20,5);
             $table->enum('type',['deposit','withdrawal','other','lcredit','ldebit']);
-            $table->string('typedetails');
             $table->text('details');
+            $table->string('depositor_name');
+            $table->string('depositor_telephone');
+            $table->date('depositor_date');
             $table->string('column1')->nullable();
             $table->string('column2')->nullable();
             $table->string('column3')->nullable();
@@ -159,8 +163,8 @@ class CreateClientsSuppliersLandsTable extends Migration
         });
         
         /*
-         * Create lands table
-         */
+        * Create lands table
+        */
         Schema::create('loans', function (Blueprint $table) {
             $table->increments('id');
             $table->string('loanid')->unique();
@@ -172,6 +176,7 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->decimal('loaned',20,2);
             $table->decimal('principal',20,2);
             $table->decimal('interest',20,2);
+            $table->decimal('monthly',20,2);
             $table->decimal('total',20,2);
             $table->string('amountstring');
             $table->enum('status',['oncourse','pending','paid','cancelled']);
@@ -184,7 +189,7 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->string('user_id');
             $table->softDeletes();
             $table->timestamps();
-
+            
             $table->foreign('user_id')->references('userid')->on('users')->onDelete('NO ACTION');
             $table->foreign('client_id')->references('clientid')->on('clients')->onDelete('NO ACTION');
             $table->foreign('account_id')->references('accountid')->on('accounts')->onDelete('NO ACTION');
@@ -197,6 +202,7 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->increments('id');
             $table->string('guarantorid')->unique();
             $table->string('application_id');
+            $table->string('client_id');
             $table->decimal('amount',20,2);
             $table->date('date');
             $table->string('column1')->nullable();
@@ -209,6 +215,7 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('user_id')->references('userid')->on('users')->onDelete('NO ACTION');
+            $table->foreign('client_id')->references('clientid')->on('clients')->onDelete('NO ACTION');
             $table->foreign('application_id')->references('applicationid')->on('applications')->onDelete('NO ACTION');
         });
 

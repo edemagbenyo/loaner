@@ -17,4 +17,12 @@ class Account extends Model
      */
     protected $dates = ['deleted_at'];
     protected $guarded = ['id'];
+
+    /**
+    * Get the loan of the user
+    *
+    **/
+    public function loan(){
+        return $this->hasOne('App\Loan','account_id','accountid')->whereIn('status',['oncourse','pending']);
+    }
 }

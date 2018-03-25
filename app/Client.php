@@ -23,6 +23,8 @@ class Client extends Model
         return $this->belongsTo('App\Account','account_id','accountid');
     }
 
+   
+
     public function total ()
     {
 
@@ -43,19 +45,5 @@ class Client extends Model
         }
         return number_format(($paid/$total) * 100 , 2)."%";
     }
-    public function balance()
-    {
-        $account = $this->hasMany('App\Account','client_id');
-
-        $paid = $account->where(['type'=>'c'])->sum('amount');
-        $total = $this->hasMany('App\Account','client_id')->where(['type'=>'d'])->sum('amount');
-        $balance = $total - $paid;
-
-        return number_format($balance);
-    }
-
-    public function lastPayment()
-    {
-        return $this->hasMany('App\Account','client_id')->where(['type'=>'c'])->orderBy('created_at','desc')->first();
-    }
+    
 }

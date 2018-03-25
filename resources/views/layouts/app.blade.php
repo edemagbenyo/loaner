@@ -103,7 +103,7 @@
                                         href="{{url('home')}}">@lang('menu.das') </a></li>
                             @if(Auth::user()->can(["*accounts","make-sales","cash","view-accounts-clients","view-accounts-suppliers","view-accounts-loans"]))
                                 <li role="presentation" class="{{Request::segment(1) == 'accounts' ? 'active': ''}}"><a
-                                            href="#">@lang('menu.acc')</a></li>
+                                            href="{{route('accounts.index')}}">@lang('menu.acc')</a></li>
                             @endif
                             @if(Auth::user()->can("*clients"))
                                 <li role="presentation" class="{{Request::segment(1) == 'clients' ? 'active': ''}}"><a
@@ -111,7 +111,7 @@
                             @endif
                             @if(Auth::user()->can("*loans"))
                                 <li role="presentation" class="{{Request::segment(1) == 'loans' ? 'active': ''}}"><a
-                                            href="#">Loans</a></li>
+                                            href="{{route('loans.index')}}">Loans</a></li>
                             @endif
                             @if(Auth::user()->can("*lands"))
                                 <li role="presentation" class="{{(Request::segment(1) == 'calls'|| Request::segment(1) == 'users-calls' || Request::segment(1) == 'user-calls') ? 'active': ''}}"><a
@@ -153,11 +153,15 @@
     $(document).ready(function () {
         $("select#permissions").select2();
 
-        $("select#clients").select2();
+        $("select#members").select2();
+
         $('span.select2').width('auto');
         $('span.select2').css('display', 'block');
         $('#datepicker').datetimepicker({
             format: "YYYY-MM-DD H:mm:s"
+        });
+        $('.guarantor').datetimepicker({
+            format: "YYYY-MM-DD"
         });
         $('#clientTransact').DataTable();
         $('#queryCash').DataTable();
