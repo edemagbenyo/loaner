@@ -16,21 +16,28 @@
                 {{csrf_field()}}
                 <div class="row">
                     <div class="col-md-4">
-                    <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
-                    <label for="title" class="control-label">Title*</label>
-                    <select name="title" id="title" class="form-control">
-                        <option value="">Select title</option>
-                        <option value="Dr" {{(old('title') == 'Dr' ? 'selected': '')}}>Dr.</option>
-                        <option value="Mr"  {{(old('title') == 'Mr' ? 'selected': '')}}>Mr.</option>
-                        <option value="Mrs"  {{(old('title') == 'Mrs' ? 'selected': '')}}>Mrs.</option>
-                        <option value="Ms"  {{(old('title') == 'Ms' ? 'selected': '')}}>Ms.</option>
-                    </select>
-                    @if ($errors->has('title'))
-                        <span class="help-block">
-                                        <strong>{{ $errors->first('title') }}</strong>
-                                    </span>
-                    @endif
-                </div></div>
+                        <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
+                            <label for="title" class="control-label">Title*</label>
+                            <select name="title" id="title" class="form-control">
+                                <option value="">Select title</option>
+                                <option value="Dr" {{(old('title') == 'Dr' ? 'selected': '')}}>Dr.</option>
+                                <option value="Mr"  {{(old('title') == 'Mr' ? 'selected': '')}}>Mr.</option>
+                                <option value="Mrs"  {{(old('title') == 'Mrs' ? 'selected': '')}}>Mrs.</option>
+                                <option value="Ms"  {{(old('title') == 'Ms' ? 'selected': '')}}>Ms.</option>
+                            </select>
+                            @if ($errors->has('title'))
+                                <span class="help-block">
+                                                <strong>{{ $errors->first('title') }}</strong>
+                                            </span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4"> 
+                        <div class="form-group">
+                        <label for="title" class="control-label">Account Number</label>
+                        <input id="acctno" type="text" class="form-control" name="acctno" value="{{ $acctno }}" required
+                           ></div>
+                    </div>
                 </div>
                 <div class="form-group{{ $errors->has('lname') ? ' has-error' : '' }}">
                     <label for="lname" class="control-label">Surname*</label>

@@ -23,6 +23,13 @@ class Client extends Model
         return $this->belongsTo('App\Account','account_id','accountid');
     }
 
+    /**
+    * Next of kin
+    *
+    **/
+    public function nok(){
+        return $this->hasOne('App\Nextofkin','client_id','clientid');
+    }
    
 
     public function total ()

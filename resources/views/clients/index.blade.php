@@ -46,7 +46,7 @@
                                 @if(Auth::user()->can(["manage-clients","delete-clients"]))
                                     {!! Form::open(['route' => ['clients.destroy', $client->id],'method'=>'post','id'=>'delete-client','style'=>'display:inline-block']) !!}
                                     <input name="_method" type="hidden" value="DELETE">
-                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                    <button class="btn btn-danger btn-sm" onclick="alert('You do not have permission to do this.')">Delete</button>
                                     {!! Form::close() !!}
                                 @endif
 

@@ -25,31 +25,45 @@ class AccountsController extends Controller
     /**
      * Post a cash transaction
      */
-    public function postTransactions(Request $request)
+    public function postTransaction(Request $request)
     {
+        //validation
+         $message=[
+            'account_id.required'=>"Select a member.",
+            'type.required'=>"Select the type of transaction.",
+            'type.depositor_name'=>"Enter the depositor name"
+        ];
+        //Validation
+        $this->validate($request,[
+            'account_id'=>'required',
+            'type'=>'required',
+            'depositor_name'=>'required',
+        ],$message);
 
+        dd($request->all());
 
-        $client = Client::where('account_id',$request->account_id)->first();
+        $account = Account::where('accountid',$request->account_id)->first();
+
+        //account_id, amount, depositor_name, depositor_telephone, details
         //calculate balance
         $previous_balance = $client->account->balance;
         $loan_balance = $client->account->loan_balance;
 
         switch ($request->type) {
             case 'deposit':
-                $balance = doubleval($previous_balance) + doubleval($request->amount);
+               depositTransaction($account,$request->amount);
                 break;
             
             case 'withdrawal':
-                $balance = doubleval($previous_balance) - doubleval($request->amount);
+                withdrawalTransaction($account, $request->amount);
                 break;
             
             case 'lcredit':
-                $loan_balance = $loan_balance;
-                $balance = doubleval($loan_balance) + doubleval($request->amount); 
-                break;
-            
-            case 'ldebit':
-                
+               loanTransaction($account, $request->amount,'credit');
+               break;
+               
+               case 'ldebit':
+               loanTransaction($account, $request->amount,'debit');
                 break;
             
             default:
@@ -57,130 +71,79 @@ class AccountsController extends Controller
                 break;
         }
 
-        Transaction::create([
-            'transactionid'=>str_random(20),
-            'client_id'=>$client->clientid,
-            'account_id'=>$request->account_id,
-            'amount'=>$request->amount,
-            'balance'=>$balance,
-            'previous_balance'=> $previous_balance,
-            'type'=>$request->type,
-            'details'=>$request->details,
-            'depositor_name'=>$request->depositor_name,
-            'depositor_telephone'=>$request->depositor_telephone,
-            'depositor_date'=>$request->depositor_name,
-        ]);
-
+       
 
         return redirect()->route('accounts.cashbook')->with('message','Record has been saved');
     }
-    /**
-     * Get the sales for the specified date
-     *
-     * @param null $fixed
-     * @param null $date
-     * @param null $range
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function queryCashbook($fixed = NULL ,$date=NULL, $range=NULL)
+   
+
+    public function getAccountLoanBalance(Request $request)
     {
-        if($fixed == 'today'){
-            $sales = Cashbook::where('updated_at','>=',Carbon::today())->where('updated_at','<=',Carbon::now())->get();
-            $date = 'Today';
-
-        }elseif($fixed =='yesterday'){
-            $sales = Cashbook::where('updated_at','>=',Carbon::yesterday())->where('updated_at','<=',Carbon::today())->get();
-            $date ='Yesterday';
-        }elseif($fixed =='full'){
-            $sales = Cashbook::all();
-            $date ='All time';
-        }
-
-        return view('accounts.cashbook.query',['sales'=>$sales,'date'=>$date]);
-    }
-
-    public function getOpeningClosingBalance(Request $request)
-    {
-        if($request->info_data == 'Today'){
-            $in = Cashbook::where('updated_at','<',Carbon::today())->where('type','c')->sum('amount');
-            $out = Cashbook::where('updated_at','<',Carbon::today())->where('type','d')->sum('amount');
-
-            $in2 = Cashbook::where('updated_at','<',Carbon::now())->where('type','c')->sum('amount');
-            $out2 = Cashbook::where('updated_at','<',Carbon::now())->where('type','d')->sum('amount');
-
-
-            $balance = $in - $out;
-            $balance2 = $in2 - $out2;
-
+        if($request->accountid){
+            $client = Client::where('account_id',$request->accountid)->first();
             $data = [
-                'opening'=>$balance,
-                'current'=>$balance2
+                'account_bal'=>$client->account->balance,
+                'loan_bal'=>$client->account->loan_balance
             ];
             return response()->json($data);
+        }else{
+            return response()->json($request->all());
         }
 
     }
 
-    public function postSales(Request $request)
-    {
-        $message=[
-            'Loan_id.required'=>"Kindly select a Loan and refill the information"
-        ];
-        //Validation
-        $this->validate($request,[
-            'client_id'=>'required',
-            'Loan_id'=>'required',
-        ],$message);
-        //Create the sales
-
-        Sale::create($request->all());
-        //Create a record in the client account
-        //Update the client account
-        ClientAccount::create([
-            'client_id'=>$request->client_id,
-            'amount'=>$request->price,
-            'details'=>$request->details,
-            'type'=>'d',
-            'currency'=>$request->currency,
-            'user_id'=>Auth::user()->id,
-            'Loan_id'=>$request->Loan_id,
-        ]);
-
-        if($request->payment > 0){
-            //Update the client account
-            ClientAccount::create([
-                'client_id'=>$request->client_id,
-                'amount'=>$request->payment,
-                'details'=>'Payment for the Loan',
-                'type'=>'c',
-                'currency'=>$request->currency,
-                'user_id'=>Auth::user()->id,
-                'Loan_id'=>$request->Loan_id,
+   
+    /**
+    * Record Transactions
+    *
+    **/
+    public function recordTransaction(){
+       
+        Transaction::create([
+                'transactionid'=>str_random(20),
+                'client_id'=>$client->clientid,
+                'account_id'=>$request->account_id,
+                'amount'=>$request->amount,
+                'balance'=>$balance,
+                'previous_balance'=> $previous_balance,
+                'type'=>$request->type,
+                'details'=>$request->details,
+                'depositor_name'=>$request->depositor_name,
+                'depositor_telephone'=>$request->depositor_telephone,
+                'depositor_date'=>$request->depositor_name,
             ]);
-        }
-        return redirect()->route('accounts.index')->with('message','Sales has been made');
+
     }
 
     /**
-     * Get the sales for a specified date
-     *
-     * @param null $fixed
-     * @param null $date
-     * @param null $range
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function querySales($fixed = NULL ,$date=NULL, $range=NULL)
-    {
-        if($fixed == 'today'){
-            $sales = Sale::where('updated_at','>=',Carbon::today())->where('updated_at','<=',Carbon::now())->get();
-            $date = 'Today';
-        }elseif($fixed =='yesterday'){
-            $sales = Sale::where('updated_at','>=',Carbon::yesterday())->where('updated_at','<=',Carbon::today())->get();
-            $date ='Yesterday';
-        }
+    * Deposit Transaction
+    *
+    **/
+    public function depositTransaction(){
+         $balance = doubleval($previous_balance) + doubleval($request->amount);
 
-        return view('accounts.sales.query',['sales'=>$sales,'date'=>$date]);
+                //Update Account informatioin
+                $account->previous_balance = $previous_balance;
+                $account->balance =  doubleval($previous_balance) + doubleval($request->amount);;
+                $account->save() ;
     }
+
+    /**
+    * Withdrawal Transaction
+    *
+    **/
+    public function withdrawalTransaction(){
+    
+    }
+
+    /**
+    * Loan Transaction
+    *
+    **/
+    public function loanTransaction(){
+    
+    }
+   
     public function clients()
     {
         return view('accounts.clients.index', ['clients' => Client::all()]);

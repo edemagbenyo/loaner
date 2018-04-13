@@ -30,7 +30,7 @@
                 @if(isset($loans) && count($loans))
                     @foreach($loans as $loan)
                         <tr>
-                            <td>{{$loan->loanee->fname. ' ' .$loan->loanee->lname }}</td>
+                            <td>{{$loan->loanee->fname or "". ' ' .$loan->loanee->lname or "" }}</td>
                             <td>{{$loan->status}}
                             </td>
                             <td>

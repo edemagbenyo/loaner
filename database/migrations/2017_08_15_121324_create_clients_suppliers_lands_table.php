@@ -22,7 +22,7 @@ class CreateClientsSuppliersLandsTable extends Migration
             $table->string('accountid')->unique();
             $table->string('accountno');
             $table->double('balance',20,5);
-            $table->double('loan_balance',20,5);
+            $table->double('loan_balance',20,5)->nullable();
             $table->double('previous_balance',20,5);
             $table->enum('type',['saving','current','credit','debit','other']);
             $table->string('column1')->nullable();

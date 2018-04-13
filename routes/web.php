@@ -97,9 +97,9 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'uses' => 'AccountsController@querySales'
     ]);
     // post sales
-    Route::post('sales/post', [
-        'as' => 'accounts.post.sales',
-        'uses' => 'AccountsController@postSales'
+    Route::post('transact/post', [
+        'as' => 'accounts.post.transact',
+        'uses' => 'AccountsController@postTransaction'
     ]);
 
     //Cashbook
@@ -118,9 +118,9 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
     ]);
 
     //Route for opening and current balance
-    Route::get('get/openclosebalance', [
-        'as' => 'get.openclose',
-        'uses' => 'AccountsController@getOpeningClosingBalance'
+    Route::get('get/accloanbal', [
+        'as' => 'get.accloanbal',
+        'uses' => 'AccountsController@getAccountLoanBalance'
     ]);
 
 

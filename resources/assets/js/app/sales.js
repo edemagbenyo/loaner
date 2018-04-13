@@ -104,16 +104,43 @@ $(function () {
     $members = $('#members');
     $transactions = $('#transactions');
     $acc_balance = $('#acc_balance');
-    $acc_balance = $('#acc_balance');
     $loan_balance = $('#loan_balance');
-
+    if(!$members.val()){
+        AccountLoanbalance($members.val());
+    }else{
+        AccountLoanbalance($members.val());
+    }
     //ON member change, let's update the account balance and the loan balance
     $members.on('change',function(){
-        
+        $this =  $(this);
+        // console.log($hidden_info.data('loan-url'));
+        AccountLoanbalance($this.val());
         
     });
     $transactions.on('change',function(){
 
         console.log("Change of transactions");
     });
+
+
+    function AccountLoanbalance(accountid){
+        if (accountid) {
+            $.get($hidden_info.data('loan-url'), { accountid: accountid }, function (data) {
+                console.log(data)
+                $acc_balance.val(data.account_bal);
+                if (!data.loan_bal) {
+                    $loan_balance.val(0);
+                } else {
+                    $loan_balance.val(data.loan_bal);
+                }
+            })
+        } else {
+
+        }
+    } // End of function
+
+    function checkWithdrawalState(){
+        
+    }
+
 });

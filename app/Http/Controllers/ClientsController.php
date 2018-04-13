@@ -38,7 +38,8 @@ class ClientsController extends Controller
     public function create()
     {
         //
-        return view('clients.create');
+        $acctno = time();
+        return view('clients.create',compact('acctno'));
     }
 
     /**
@@ -73,7 +74,7 @@ class ClientsController extends Controller
         //We create and account first before we create a client
         $account = Account::create([
         'accountid'=>str_random(25),
-        'accountno'=>random_int(100000,9999999),
+        'accountno'=>$request->acctno,
         'balance'=>'0.00',
         'type'=>'saving',
         'previous_balance'=>'0.00',
@@ -153,7 +154,8 @@ class ClientsController extends Controller
     public function edit($id)
     {
         //
-        return view('clients.edit',['client'=>Client::find($id)]);
+        $client = Client::find($id);
+        return view('clients.edit',['client'=>$client,'nok'=>$client->nok]);
 
     }
 
@@ -172,7 +174,6 @@ class ClientsController extends Controller
             'fname' => 'required|max:255',
             'lname' => 'required|max:255',
             'oname' => 'max:255',
-            'email' => 'email|max:255',
             'telephone1' => 'required',
             'telephone2' => 'required',
             'paddress' => 'required|max:255',
@@ -186,12 +187,12 @@ class ClientsController extends Controller
             'spousetel' => 'required|max:255',
         ]);
 
-        $client = Client::find($id);
+        $client = Client::where('clientid',$id)->first();
+        // dd($client );
         $client->title= $request->title;
         $client->fname= $request->fname;
         $client->lname= $request->lname;
         $client->oname= $request->oname;
-        $client->email= $request->email;
         $client->telephone1= $request->telephone1;
         $client->telephone2= $request->telephone2;
         $client->paddress= $request->paddress;
@@ -203,11 +204,20 @@ class ClientsController extends Controller
         $client->profession= $request->profession;
         $client->spousename= $request->spousename;
         $client->spousetel= $request->spousetel;
-        $client->user_id = Auth::user()->id;
 
         $client->save();
-
-        return redirect()->route('clients.index')->with('message',$request->name.' has been updated successfully');
+        if($client){
+            //Add next of kin
+            $nok = Nextofkin::where('client_id',$client->clientid)->first();
+            $nok->name = $request->next_name;
+            $nok->telephone1 = $request->telephone1;
+            $nok->address = $request->next_address;
+            $nok->relationship = $request->relationship;
+            $nok->user_id = Auth::user()->userid;
+            $nok->save();
+            }
+        
+        return redirect()->route('clients.index')->with('message',$request->fname.' has been updated successfully');
     }
 
     /**
@@ -219,8 +229,8 @@ class ClientsController extends Controller
     public function destroy($id)
     {
         //
-
-        Client::find($id)->delete();
+        
+        //Client::find($id)->delete();
         return redirect()->route('clients.index')->with('message','Client has been deleted successfully');
 
 
