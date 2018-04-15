@@ -24,6 +24,13 @@ class Client extends Model
     }
 
     /**
+    * transactions
+    *
+    **/
+    public function transactions(){
+        return $this->hasMany('App\Transaction','client_id','clientid');
+    }
+    /**
     * Next of kin
     *
     **/

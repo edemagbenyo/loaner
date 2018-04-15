@@ -7,6 +7,7 @@ use App\Client;
 use App\Transaction;
 use App\Loan;
 use App\Sale;
+use App\Account;
 use App\Supplier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,15 @@ class AccountsController extends Controller
 
 
     /**
+    * Get transactions
+    *
+    **/
+    public function getTransactions(){
+        $transactions =  Transaction::latest()->get();
+        return view('accounts.transactions.all',compact('transactions'));
+    }
+
+    /**
      * Post a cash transaction
      */
     public function postTransaction(Request $request)
@@ -35,36 +45,36 @@ class AccountsController extends Controller
         ];
         //Validation
         $this->validate($request,[
-            'account_id'=>'required',
+            'accountid'=>'required',
             'type'=>'required',
             'depositor_name'=>'required',
         ],$message);
 
-        dd($request->all());
+        // dd($request->all());
 
-        $account = Account::where('accountid',$request->account_id)->first();
+        // $account = Account::where('accountid',$request->account_id)->first();
 
         //account_id, amount, depositor_name, depositor_telephone, details
         //calculate balance
-        $previous_balance = $client->account->balance;
-        $loan_balance = $client->account->loan_balance;
+        // $previous_balance = $client->account->balance;
+        // $loan_balance = $client->account->loan_balance;
 
         switch ($request->type) {
             case 'deposit':
-               depositTransaction($account,$request->amount);
+               $this->depositTransaction($request);
                 break;
             
             case 'withdrawal':
-                withdrawalTransaction($account, $request->amount);
+                $this->withdrawalTransaction($request);
                 break;
             
             case 'lcredit':
-               loanTransaction($account, $request->amount,'credit');
+               $this->loanCreditTransaction($request);
                break;
                
-               case 'ldebit':
-               loanTransaction($account, $request->amount,'debit');
-                break;
+            case 'ldebit':
+                $this->loanTransaction($account, $request->amount,'debit');
+            break;
             
             default:
                 # code...
@@ -73,10 +83,13 @@ class AccountsController extends Controller
 
        
 
-        return redirect()->route('accounts.cashbook')->with('message','Record has been saved');
+        return redirect()->back()->with('message','Your transaction has been recorded successfully!');
     }
    
 
+    /**
+     * Get the Loan balance of the selected member
+     */
     public function getAccountLoanBalance(Request $request)
     {
         if($request->accountid){
@@ -92,12 +105,66 @@ class AccountsController extends Controller
 
     }
 
+    /**
+    * Get the information of member loan and account balance before withdrawal
+    *
+    **/
+    public function getWithdrawalState(Request $request){
+        
+        $account = Account::where('accountid',$request->accountid)->first();
+        if($account->loan_balance > 0){
+            $data = [
+                'status'=>'loan_active',
+                'message'=>'This member has an unpaid loan. You can\'t make a withdrawal. '
+            ];
+            return response()->json($data);
+        }elseif($account->balance < $request->amount){
+            $data = [
+                'status'=>'balance_insufficient',
+                'message'=>'You can\'t redraw more than your current balance.'
+            ];
+            return response()->json($data);
+        }else{
+            $data = [
+                'status'=>'ok',
+                'message'=>'Carry on'
+            ];
+            return response()->json($data);
+        }
+    }
+
+    /**
+    * Get the state of the loan
+    *
+    **/
+    public function getLoanState(Request $request){
+        $account = Account::where('accountid',$request->accountid)->first();
+        if($account->loan_balance && $account->loan_balance > 0){
+            $data = [
+                'status'=>'loan_active',
+                'message'=>'This member has an unpaid loan.'
+            ];
+            return response()->json($data);
+        }elseif( $account->loan_balance && $account->loan_balance < 0){
+            $data = [
+                'status'=>'no_loan',
+                'message'=>'You have no loan. You cannot pay for a loan.'
+            ];
+            return response()->json($data);
+        }else{
+            $data = [
+                'status'=>'no_loan',
+                'message'=>'You have no loan. You cannot pay for a loan.'
+            ];
+            return response()->json($data);
+        }
+    }
    
     /**
     * Record Transactions
     *
     **/
-    public function recordTransaction(){
+    public function recordTransaction($request, $type){
        
         Transaction::create([
                 'transactionid'=>str_random(20),
@@ -119,20 +186,73 @@ class AccountsController extends Controller
     * Deposit Transaction
     *
     **/
-    public function depositTransaction(){
-         $balance = doubleval($previous_balance) + doubleval($request->amount);
+    public function depositTransaction($request){
+        $account = Account::where('accountid',$request->accountid)->first();
+        
+        //We update the account table
+       $previous_balance = (!empty($account->balance)? $account->balance: 0);
+       $balance = doubleval($previous_balance) + doubleval($request->amount);
+    //    dd($previous_balance);
+        //Update Account informatioin
+        $account->previous_balance = doubleval($previous_balance);
+        $account->balance = $balance;
+        $account->save() ;
 
-                //Update Account informatioin
-                $account->previous_balance = $previous_balance;
-                $account->balance =  doubleval($previous_balance) + doubleval($request->amount);;
-                $account->save() ;
+
+        
+        //We create a transaction table
+        Transaction::create([
+            'transactionid'=>str_random(20),
+            'client_id' =>$account->client->clientid,
+            'account_id'=>$request->accountid,
+            'amount'=>$request->amount,
+            'balance'=> $balance,
+            'previous_balance'=> $previous_balance,
+            'type'=>'deposit',
+            'details'=>$request->details,
+            'depositor_name'=>$request->depositor_name,
+            'depositor_telephone'=>$request->depositor_telephone,
+            'depositor_date'=>Carbon::today(),
+            'user_id'=>Auth::user()->userid
+
+        ]);        
     }
 
     /**
     * Withdrawal Transaction
     *
     **/
-    public function withdrawalTransaction(){
+    public function withdrawalTransaction(Request$request){
+
+        $account = Account::where('accountid',$request->accountid)->first();
+        
+        //We update the account table
+       $previous_balance = (!empty($account->balance)? $account->balance: 0);
+       $balance = doubleval($previous_balance) - doubleval($request->amount);
+    //    dd($previous_balance);
+        //Update Account informatioin
+        $account->previous_balance = doubleval($previous_balance);
+        $account->balance = $balance;
+        $account->save() ;
+
+
+        
+        //We create a transaction table
+        Transaction::create([
+            'transactionid'=>str_random(20),
+            'client_id' =>$account->client->clientid,
+            'account_id'=>$request->accountid,
+            'amount'=>$request->amount,
+            'balance'=> $balance,
+            'previous_balance'=> $previous_balance,
+            'type'=>'withdrawal',
+            'details'=>$request->details,
+            'depositor_name'=>$request->depositor_name,
+            'depositor_telephone'=>$request->depositor_telephone,
+            'depositor_date'=>Carbon::today(),
+            'user_id'=>Auth::user()->userid
+
+        ]);        
     
     }
 
@@ -140,18 +260,50 @@ class AccountsController extends Controller
     * Loan Transaction
     *
     **/
-    public function loanTransaction(){
+    public function loanCreditTransaction($request){
+        
+        $account = Account::where('accountid',$request->accountid)->first();
+        
+        //We update the account table
+       $previous_balance = (!empty($account->loan_balance)? $account->loan_balance: 0);
+       $balance = doubleval($previous_balance) - doubleval($request->amount);
+    //    dd($previous_balance);
+        //Update Account informatioin
+        $account->loan_balance = doubleval($balance);
+        $account->save() ;
+
+
+        
+        //We create a transaction table
+        Transaction::create([
+            'transactionid'=>str_random(20),
+            'client_id' =>$account->client->clientid,
+            'account_id'=>$request->accountid,
+            'amount'=>$request->amount,
+            'balance'=> $balance,
+            'previous_balance'=> $previous_balance,
+            'type'=>'lcredit',
+            'details'=>$request->details,
+            'depositor_name'=>$request->depositor_name,
+            'depositor_telephone'=>$request->depositor_telephone,
+            'depositor_date'=>Carbon::today(),
+            'user_id'=>Auth::user()->userid
+
+        ]);        
     
     }
    
     public function clients()
     {
+
         return view('accounts.clients.index', ['clients' => Client::all()]);
     }
 
     public function viewClientAccount($id)
     {
-        return view('accounts.clients.account',['client'=>Client::find($id)]);
+        $client = Client::where('clientid',$id)->first();
+        
+        return view('accounts.clients.account',compact('client'));
     }
 
     public function suppliers()
@@ -165,7 +317,57 @@ class AccountsController extends Controller
 
     public function LoanStatus()
     {
-        return view('accounts.Loans.index', ['Loans' => Loan::all()]);
+        return view('accounts.loans.index', ['loans' => loan::latest()->get()]);
+    }
+    /**
+    * Get the status details of a loan
+    *
+    **/
+    public function loanStatusDetails($loanid){
+        $loan = Loan::where('loanid',$loanid)->first();
+         return view('accounts.loans.details', compact('loan'));
+    }
+
+    /**
+    * Loan Action
+    *
+    **/
+    public function loanAction($action, $loanid){
+        $loan = Loan::where('loanid',$loanid)->first();
+        $application = Loan::where('loanid',$loanid)->first()->application;
+
+        if($application->status == 'approved' || $application->status == 'denied'){
+             return redirect()->back()->with('message','This action cannot be performed!');
+        }
+
+        if($action == 'approve'){
+            $application->status = 'approved';
+            $application->column1 = Auth::user()->userid;
+            $application->save();
+
+
+            $loan_amount = doubleval($application->amount) + doubleval($application->account->loan_balance);
+            $application->account->loan_balance = $loan_amount;
+            $application->account->save();
+
+            $message="Loan has been approved";
+
+        }
+        elseif($action == 'deny'){
+            $application->status = 'denied';
+            $application->column1 = Auth::user()->userid;
+            $application->save();
+
+            $message="Loan has been denied.";
+        }
+        elseif($action == 'review'){
+            $application->status = 'pending';
+            $application->column1 = Auth::user()->userid;
+            $application->save();
+
+            $message="Loan is under review.";
+        }
+        return redirect()->back()->with('message',$message);
     }
 
 

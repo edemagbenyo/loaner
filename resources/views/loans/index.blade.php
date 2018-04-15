@@ -30,17 +30,20 @@
                 @if(isset($loans) && count($loans))
                     @foreach($loans as $loan)
                         <tr>
-                            <td>{{$loan->loanee->fname or "". ' ' .$loan->loanee->lname or "" }}</td>
+                            <td>{{$loan->loanee->fname. ' ' .$loan->loanee->lname }}</td>
                             <td>{{$loan->status}}
                             </td>
                             <td>
                                 @if(Auth::user()->can(["manage-loans","edit-loans"]))
                                     <a class="btn btn-default" href="{{route('loans.edit',$loan->id)}}">Edit</a>
                                 @endif
+                                @if(Auth::user()->can(["manage-loans","view-loans"]))
+                                    <a class="btn btn-primary" href="{{route('loans.show',$loan->loanid)}}">View</a>
+                                @endif
                                 @if(Auth::user()->can(["manage-loans","delete-loans"]))
                                     {!! Form::open(['route' => ['loans.destroy', $loan->id],'method'=>'post','id'=>'delete-loan','style'=>'display:inline-block']) !!}
                                     <input name="_method" type="hidden" value="DELETE">
-                                    <button class="btn btn-danger">Delete</button>
+                                    <button class="btn btn-danger">Cancel</button>
                                     {!! Form::close() !!}
                                 @endif
 

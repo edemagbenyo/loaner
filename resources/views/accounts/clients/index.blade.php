@@ -2,7 +2,7 @@
 @section('styles')
     @parent
     <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+          href="{{asset('datatables.min.css')}}"/>
 
 @endsection
 @section('account-content')
@@ -14,8 +14,7 @@
                 <tr>
                     <th>Name
                     </th>
-                    <th>Last Payment</th>
-                    <th>Payment Progress</th>
+                    {{-- <th>Payment Progress</th> --}}
                     <th>Options</th>
                 </tr>
                 </thead>
@@ -24,18 +23,17 @@
                     @foreach($clients as $client)
                         @if(count($client->account))
                             <tr>
-                                <td>{{$client->name}}</td>
-                                <td title="{{$client->lastPayment()->created_at->toDateTimeString()}}">{{$client->lastPayment()->amount}}  on {{$client->lastPayment()->created_at->toDateString()}} </td>
-                                <td>
+                                <td>{{$client->fname.' '.$client->lname}}</td>
+                                {{-- <td>
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{$client->percentPaid()}}">
-                                            {{$client->percentPaid()}}
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                            
                                         </div>
                                     </div>
-                                </td>
+                                </td> --}}
                                 <td>
                                     @if(Auth::user()->can(["manage-clients","account-clients"]))
-                                        <a class="btn btn-success" href="{{route('view.client.account',$client->id)}}">View Account</a>
+                                        <a class="btn btn-success" href="{{route('view.client.account',$client->clientid)}}">View Account</a>
                                     @endif
                                 </td>
                             </tr>

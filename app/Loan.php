@@ -25,5 +25,40 @@ class Loan extends Model
     public function loanee(){
         return $this->belongsTo('App\Client','client_id','clientid');
     }
+
+    /**
+    * Applicant
+    *
+    **/
+    public function applicant(){
+        $loan =  $this->belongsTo('App\Client','client_id','clientid');
+        return $loan;
+    }
+
+    
+    /**
+    * Application
+    *
+    **/
+    public function application(){
+        return $this->belongsTo('App\Application','application_id','applicationid');
+    }
+
+    /**
+     * Account
+     *
+     **/
+     public function account(){
+        return $this->belongsTo('App\Account','account_id','accountid');
+     }
+    /**
+    * PercentagePaid
+    *
+    **/
+    public function percentPaid(){
+    
+    }
+
+
    
 }

@@ -96,21 +96,19 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
         'as' => 'query.sales',
         'uses' => 'AccountsController@querySales'
     ]);
-    // post sales
+    // post transaction
     Route::post('transact/post', [
         'as' => 'accounts.post.transact',
         'uses' => 'AccountsController@postTransaction'
     ]);
+    // Get transactions
+    Route::get('transacts', [
+        'as' => 'accounts.get.transact',
+        'uses' => 'AccountsController@getTransactions'
+    ]);
 
-    //Cashbook
-    Route::get('cashbook', [
-        'as' => 'accounts.cashbook',
-        'uses' => 'AccountsController@cashbook'
-    ]);
-    Route::post('cashbook/post', [
-        'as' => 'accounts.post.cashbook',
-        'uses' => 'AccountsController@postCashbook'
-    ]);
+    
+    
     //Route for specific date cashbook record
     Route::get('query/cashbook/{fixed?}/{date?}/{range?}/', [
         'as' => 'query.cashbook',
@@ -121,6 +119,18 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
     Route::get('get/accloanbal', [
         'as' => 'get.accloanbal',
         'uses' => 'AccountsController@getAccountLoanBalance'
+    ]);
+    Route::get('get/withdrawstate', [
+        'as' => 'get.withdrawstate',
+        'uses' => 'AccountsController@getWithdrawalState'
+    ]);
+    Route::get('get/loanwithdrawstate', [
+        'as' => 'get.loanwithdrawstate',
+        'uses' => 'AccountsController@getLoanWithdrawalState'
+    ]);
+    Route::get('get/loanstate', [
+        'as' => 'get.loanstate',
+        'uses' => 'AccountsController@getLoanState'
     ]);
 
 
@@ -152,6 +162,14 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
     Route::get('loans', [
         'as' => 'accounts.loans',
         'uses' => 'AccountsController@loanstatus'
+    ]);
+    Route::get('loans/{loanid}', [
+        'as' => 'accounts.loan.details',
+        'uses' => 'AccountsController@loanStatusDetails'
+    ]);
+     Route::get('loan/{action}/{loanid}', [
+        'as' => 'accounts.loan.action',
+        'uses' => 'AccountsController@loanAction'
     ]);
 
 

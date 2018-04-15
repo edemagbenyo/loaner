@@ -37,8 +37,18 @@ class ClientsController extends Controller
      */
     public function create()
     {
-        //
-        $acctno = time();
+        //$num
+        //$get the latest aaccoun
+        // Account
+        $latest = Account::latest()->first();
+        if(!$latest){
+            $n = date('Y').'00001';
+            $n = intval($n);
+        }else{
+           $n =  intval($latest->accountno)+1;
+        }
+
+        $acctno = 'OY'.$n;
         return view('clients.create',compact('acctno'));
     }
 
@@ -74,7 +84,7 @@ class ClientsController extends Controller
         //We create and account first before we create a client
         $account = Account::create([
         'accountid'=>str_random(25),
-        'accountno'=>$request->acctno,
+        'accountno'=>substr($request->acctno,1),
         'balance'=>'0.00',
         'type'=>'saving',
         'previous_balance'=>'0.00',

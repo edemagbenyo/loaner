@@ -99,19 +99,42 @@ class LoansController extends Controller
             ]);
             
             //Add the garantors
-            for($i=1; $i<=3; $i++){
+            // for($i=1; $i<=3; $i++){
                 //1st - 3rd
-                if(($request->guar.$i) !== null && ($request->amount.$i)){
+                if(!empty($request->guar1) && !empty($request->amount1)){
+                    echo $request->guar1;
                     Guarantor::create([
                         'guarantorid'=>str_random(20),
                         'application_id'=>$appl->applicationid,
-                        'amount'=>$request->input('amount'.$i),
-                        'date'=>$request->input('date'.$i),
-                        'client_id'=>$request->input('guar'.$i),
+                        'amount'=>$request->input('amount1'),
+                        'date'=>$request->input('date1'),
+                        'client_id'=>$request->input('guar1'),
                         'user_id'=>Auth::user()->userid
                     ]);
                 }
-            }
+                if(!empty($request->guar2) && !empty($request->amount1)){
+                    echo $request->guar2;
+                    Guarantor::create([
+                        'guarantorid'=>str_random(20),
+                        'application_id'=>$appl->applicationid,
+                        'amount'=>$request->input('amount2'),
+                        'date'=>$request->input('date2'),
+                        'client_id'=>$request->input('guar2'),
+                        'user_id'=>Auth::user()->userid
+                    ]);
+                }
+                if(!empty($request->guar3) && !empty($request->amount1)){
+                    echo $request->guar3;
+                    Guarantor::create([
+                        'guarantorid'=>str_random(20),
+                        'application_id'=>$appl->applicationid,
+                        'amount'=>$request->input('amount3'),
+                        'date'=>$request->input('date3'),
+                        'client_id'=>$request->input('guar3'),
+                        'user_id'=>Auth::user()->userid
+                    ]);
+                }
+            // }
             
             if($appl){
                 Loan::create([
@@ -155,6 +178,9 @@ class LoansController extends Controller
     public function show($id)
     {
         //
+        $loan = Loan::where('loanid',$id)->first();
+        return view('loans.view',compact('loan'));
+
     }
 
     /**
@@ -166,7 +192,7 @@ class LoansController extends Controller
     public function edit($id)
     {
         //
-        return view('loans.edit',['land'=>Land::find($id) , 'suppliers'=>Supplier::all()]);
+        return view('loans.edit',['loan'=>Loan::find($id)]);
 
     }
 

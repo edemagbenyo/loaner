@@ -18,6 +18,7 @@
 
     {{--Select 2 --}}
     <link href="{{asset('select2/css/select2.min.css')}}" rel="stylesheet"/>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 
     @section('styles')
     @show
@@ -147,6 +148,7 @@
 <script src="{{ asset('js/moment.js') }}"></script>
 <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
 <script src="{{asset('select2/js/select2.min.js')}}"></script>
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 @section('scripts')
 @show
 <script type="text/javascript">
@@ -158,7 +160,7 @@
         $('span.select2').width('auto');
         $('span.select2').css('display', 'block');
         $('#datepicker').datetimepicker({
-            format: "YYYY-MM-DD H:mm:s"
+            format: "YYYY-MM-DD"
         });
         $('.guarantor').datetimepicker({
             format: "YYYY-MM-DD"

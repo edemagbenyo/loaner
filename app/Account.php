@@ -25,4 +25,12 @@ class Account extends Model
     public function loan(){
         return $this->hasOne('App\Loan','account_id','accountid')->whereIn('status',['oncourse','pending']);
     }
+
+    /**
+    * client 
+    *
+    **/
+    public function client(){
+        return $this->hasOne('App\Client','account_id','accountid');
+    }
 }

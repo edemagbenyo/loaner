@@ -2,7 +2,7 @@
 @section('styles')
     @parent
     <link rel="stylesheet" type="text/css"
-          href="https://cdn.datatables.net/v/dt/dt-1.10.15/r-2.1.1/datatables.min.css"/>
+          href="{{asset('datatables.min.css')}}"/>
 
 @endsection
 @section('account-content')
@@ -15,15 +15,15 @@
                     <table class="table">
                         <tr>
                             <td>Name</td>
-                            <td>{{$client->name}}</td>
+                            <td>{{$client->fname. ' '.$client->lname}}</td>
                         </tr>
                         <tr>
                             <td>Contact</td>
-                            <td>{{$client->contact}}</td>
+                            <td>{{$client->telephone1}}</td>
                         </tr>
                         <tr>
-                            <td>Email</td>
-                            <td>{{$client->email}}</td>
+                            <td>Address</td>
+                            <td>{{$client->paddress}}</td>
                         </tr>
                     </table>
                 </div>
@@ -32,16 +32,16 @@
                     <h3>Financial Information</h3>
                     <table class="table">
                         <tr>
-                            <td>Total</td>
-                            <td style="font-weight: bold">{{number_format($client->total())}}</td>
+                            <td>Account Balance</td>
+                            <td style="font-weight: bold">{{$client->account->balance}}</td>
                         </tr>
                         <tr>
-                            <td>Payment made</td>
-                            <td style="font-weight: bold">{{number_format($client->paid())}}</td>
+                            <td>Loan Taken</td>
+                            <td style="font-weight: bold"></td>
                         </tr>
                         <tr>
-                            <td>Balance</td>
-                            <td style="font-weight: bold">{{$client->balance()}}</td>
+                            <td>Loan Balance</td>
+                            <td style="font-weight: bold"></td>
                         </tr>
                     </table>
                 </div>
@@ -57,11 +57,23 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if(isset($client->account) && count($client->account))
-                    @foreach($client->account as $t)
+                @if(isset($client->transactions) && count($client->transactions))
+                    @foreach($client->transactions as $t)
                         <tr>
                             <td title="{{$t->details}}">{{substr($t->details,0,40)}}</td>
-                            <td>{{($t->type=='c')?"Payment":"Sales"}}</td>
+                            <td>
+                                 @if($t->type =='deposit')
+                                    
+                                        Deposit
+                                       
+                                    @elseif($t->type=='withdrawal')
+                                        Withdrawal
+                                    @elseif($t->type=='lcredit')
+                                        Loan Payment
+                                    @elseif($t->type=='ldebit')
+                                        Loan Payment
+                                    @endif
+                            </td>
                             <td>{{$t->amount}}</td>
                             <td>{{$t->created_at->toDateTimeString() }}</td>
                         </tr>
