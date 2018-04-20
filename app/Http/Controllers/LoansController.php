@@ -83,7 +83,7 @@ class LoansController extends Controller
         // $accountid = $client->account->accountid;
 
         //Save the application
-        $appl = Application::create([
+        $appl = Application::create([ 
             'applicationid'=>str_random(20),
             'client_id'=>$client->clientid,
             'account_id'=>$request->account_id,
@@ -95,7 +95,7 @@ class LoansController extends Controller
             'repaymentperiod2'=>$request->repaymentperiod,
             'status'=>'submitted',
             'user_id'=>Auth::user()->userid,
-            'applicationid'=>str_random(20),
+            'column1'=>($request->amount * 1.2) //We save amount to pay here
             ]);
             
             //Add the garantors
@@ -145,9 +145,9 @@ class LoansController extends Controller
                     'interestrate'=>0.00,
                     'granted'=>0.00,
                     'loaned'=>0.00,
-                    'principal'=>0.00,
+                    'principal'=>$request->amount,
                     'interest'=>0.00,
-                    'monthly'=>0.00,
+                    'monthly'=>$request->monthlypay,
                     'total'=>0.00,
                     'amountstring'=>'',
                     'status'=>'pending',
@@ -232,8 +232,12 @@ class LoansController extends Controller
     public function destroy($id)
     {
         //
+        $loan = Loan::find($id);
+        if($loan->status == 'pending'||$loan->status == 'oncourse'){
+            return back()->with('message','This loan cannot be archived');
+        }
+        $loan->delete();
 
-        Loan::find($id)->delete();
         return redirect()->route('loans.index')->with('message','land has been deleted successfully');
     }
 

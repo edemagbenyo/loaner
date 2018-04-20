@@ -15,7 +15,6 @@
                 <tr>
                     <th>Name
                     </th>
-                    <th>Percentage Paid</th>
                     <th>Status</th>
                     <th>Options</th>
                 </tr>
@@ -25,13 +24,7 @@
                     @foreach($loans as $loan)
                             <tr>
                                 <td>{{$loan->applicant->fname.' '.$loan->applicant->lname}}</td>
-                                <td>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{$loan->percentPaid()}}">
-                                            {{$loan->percentPaid()}}
-                                        </div>
-                                    </div>
-                                </td>
+                                
                                 <td>
                                 {{$loan->application->status}}
                                 </td>

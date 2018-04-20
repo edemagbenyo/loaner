@@ -156,6 +156,7 @@
         $("select#permissions").select2();
 
         $("select#members").select2();
+        $("select.guar").select2();
 
         $('span.select2').width('auto');
         $('span.select2').css('display', 'block');

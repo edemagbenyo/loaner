@@ -62,7 +62,7 @@
                        </div>
                        <div class="col-md-6">
                            <label for="">Amount</label>
-                           <input type="text" id="amount" name="amount" class="form-control"value="{{old('amount',0)}}" required>
+                           <input type="number" id="amount" name="amount" class="form-control"value="{{old('amount',0)}}" required>
                        </div>
                    </div>
                 </div>
@@ -70,11 +70,11 @@
                    <div class="row">
                        
                        <div class="col-md-6">
-                           <label for="">Deposited By</label>
+                           <label for="">Transactor</label>
                            <input type="text" id="depositor" name="depositor_name" class="form-control" value="{{old('depositor_name')}}" required>
                        </div>
                        <div class="col-md-6">
-                           <label for="">Depositor Telephone NUmber</label>
+                           <label for="">Transactor Telephone NUmber</label>
                            <input type="number" id="telephone" name="depositor_telephone" class="form-control" value="{{old('depositor_telephone')}}" required>
                        </div>
                    </div>
@@ -84,11 +84,20 @@
                        
                        <div class="col-md-6">
                            <label for="">Account Balance</label>
-                           <input type="text" id="acc_balance" class="form-control" readonly>
+                           <input type="number" id="acc_balance" class="form-control" readonly>
                        </div>
                        <div class="col-md-6">
-                           <label for="">Loan Balance</label>
-                           <input type="text" id="loan_balance" class="form-control" readonly>
+                           <label for="">Available Loan Balance</label>
+                           <input type="number" id="loan_balance" class="form-control" readonly>
+                       </div>
+                   </div>
+                </div>
+                <div class="form-group">
+                   <div class="row">
+                       
+                       <div class="col-md-12">
+                           <label for="">Loan Balance to Pay</label>
+                           <input type="number" id="loan_topay" class="form-control" readonly>
                        </div>
                    </div>
                 </div>

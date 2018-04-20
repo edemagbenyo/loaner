@@ -11,7 +11,7 @@
         @endif
         <div class="col-md-10 col-md-offset-1">
             <h3>Loan applications</h3>
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="clientTransact">
                 <thead>
                 <tr>
                     <th>Name
@@ -43,7 +43,7 @@
                                 @if(Auth::user()->can(["manage-loans","delete-loans"]))
                                     {!! Form::open(['route' => ['loans.destroy', $loan->id],'method'=>'post','id'=>'delete-loan','style'=>'display:inline-block']) !!}
                                     <input name="_method" type="hidden" value="DELETE">
-                                    <button class="btn btn-danger">Cancel</button>
+                                    <button class="btn btn-danger">Archive</button>
                                     {!! Form::close() !!}
                                 @endif
 

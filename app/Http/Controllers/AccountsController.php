@@ -72,8 +72,8 @@ class AccountsController extends Controller
                $this->loanCreditTransaction($request);
                break;
                
-            case 'ldebit':
-                $this->loanTransaction($account, $request->amount,'debit');
+            case 'dcredit':
+                $this->loanWithdrawTransaction($request);
             break;
             
             default:
@@ -96,7 +96,8 @@ class AccountsController extends Controller
             $client = Client::where('account_id',$request->accountid)->first();
             $data = [
                 'account_bal'=>$client->account->balance,
-                'loan_bal'=>$client->account->loan_balance
+                'loan_bal'=>$client->account->loan_balance,
+                'loan_topay'=>$client->account->column2
             ];
             return response()->json($data);
         }else{
@@ -112,24 +113,40 @@ class AccountsController extends Controller
     public function getWithdrawalState(Request $request){
         
         $account = Account::where('accountid',$request->accountid)->first();
-        if($account->loan_balance > 0){
-            $data = [
-                'status'=>'loan_active',
-                'message'=>'This member has an unpaid loan. You can\'t make a withdrawal. '
-            ];
-            return response()->json($data);
-        }elseif($account->balance < $request->amount){
-            $data = [
-                'status'=>'balance_insufficient',
-                'message'=>'You can\'t redraw more than your current balance.'
-            ];
-            return response()->json($data);
-        }else{
-            $data = [
-                'status'=>'ok',
-                'message'=>'Carry on'
-            ];
-            return response()->json($data);
+        if($request->type == 'withdrawal'){
+                    if($account->column2 > 0){
+                $data = [
+                    'status'=>'loan_active',
+                    'message'=>'This member has an unpaid loan. You can\'t make a withdrawal. '
+                ];
+                return response()->json($data);
+            }elseif($account->balance < $request->amount){
+                $data = [
+                    'status'=>'balance_insufficient',
+                    'message'=>'You can\'t redraw more than your current balance.'
+                ];
+                return response()->json($data);
+            }else{
+                $data = [
+                    'status'=>'ok',
+                    'message'=>'Carry on'
+                ];
+                return response()->json($data);
+            }
+        }elseif($request->type == 'dcredit'){
+            if($account->loan_balance > $request->amount){
+                $data = [
+                    'status'=>'ok',
+                    'message'=>'carry on'
+                ];
+                return response()->json($data);
+            }elseif($account->loan_balance < $request->amount || $account->loan_balance < 0){
+                $data = [
+                    'status'=>'dcredit_small',
+                    'message'=>'You can\'t redraw more than your current loan balance.'
+                ];
+                return response()->json($data);
+            }
         }
     }
 
@@ -139,13 +156,13 @@ class AccountsController extends Controller
     **/
     public function getLoanState(Request $request){
         $account = Account::where('accountid',$request->accountid)->first();
-        if($account->loan_balance && $account->loan_balance > 0){
+        if($account->column2 && $account->column2 > 0){
             $data = [
                 'status'=>'loan_active',
                 'message'=>'This member has an unpaid loan.'
             ];
             return response()->json($data);
-        }elseif( $account->loan_balance && $account->loan_balance < 0){
+        }elseif( $account->column2 && $account->column2 < 0){
             $data = [
                 'status'=>'no_loan',
                 'message'=>'You have no loan. You cannot pay for a loan.'
@@ -265,8 +282,44 @@ class AccountsController extends Controller
         $account = Account::where('accountid',$request->accountid)->first();
         
         //We update the account table
+       $previous_balance = (!empty($account->column2)? $account->column2: 0); //We get the loan to pay amount
+       $balance = doubleval($previous_balance) - doubleval($request->amount); //Subtract the amount being paid from the balance of loan to pay
+
+       //Update Account informatioin
+        $account->column2 = doubleval($balance);
+        $account->save() ;
+
+
+        
+        //We create a transaction table
+        Transaction::create([
+            'transactionid'=>str_random(20),
+            'client_id' =>$account->client->clientid,
+            'account_id'=>$request->accountid,
+            'amount'=>$request->amount,
+            'balance'=> $balance,
+            'previous_balance'=> $previous_balance,
+            'type'=>'lcredit',
+            'details'=>$request->details,
+            'depositor_name'=>$request->depositor_name,
+            'depositor_telephone'=>$request->depositor_telephone,
+            'depositor_date'=>Carbon::today(),
+            'user_id'=>Auth::user()->userid
+
+        ]);        
+    
+    }
+    /**
+    * Loan Transaction
+    *
+    **/
+    public function loanWithdrawTransaction($request){
+        // dd($request->all());
+        $account = Account::where('accountid',$request->accountid)->first();
+        
+        //We update the account table
        $previous_balance = (!empty($account->loan_balance)? $account->loan_balance: 0);
-       $balance = doubleval($previous_balance) - doubleval($request->amount);
+       $balance = doubleval($previous_balance) - doubleval($request->amount); //Withdrawal will be made from available loan
     //    dd($previous_balance);
         //Update Account informatioin
         $account->loan_balance = doubleval($balance);
@@ -282,7 +335,7 @@ class AccountsController extends Controller
             'amount'=>$request->amount,
             'balance'=> $balance,
             'previous_balance'=> $previous_balance,
-            'type'=>'lcredit',
+            'type'=>'ldebit',
             'details'=>$request->details,
             'depositor_name'=>$request->depositor_name,
             'depositor_telephone'=>$request->depositor_telephone,
@@ -345,10 +398,17 @@ class AccountsController extends Controller
             $application->column1 = Auth::user()->userid;
             $application->save();
 
-
-            $loan_amount = doubleval($application->amount) + doubleval($application->account->loan_balance);
+            //Loan Amount available for redrawal
+            $loan_amount = doubleval($application->amount) + (doubleval($application->account->loan_balance) * 1.2);
+            
+            //Loan amount to pay
+            $loan_topay = doubleval($application->amount) + doubleval($application->account->column2);
+            
             $application->account->loan_balance = $loan_amount;
+            $application->account->column2 = $loan_topay; //
             $application->account->save();
+
+            //We get the loan and update its info
 
             $message="Loan has been approved";
 
@@ -357,6 +417,8 @@ class AccountsController extends Controller
             $application->status = 'denied';
             $application->column1 = Auth::user()->userid;
             $application->save();
+
+            //We get the loan
 
             $message="Loan has been denied.";
         }

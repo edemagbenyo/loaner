@@ -27,7 +27,7 @@
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                     <label for="name" class="control-label">Member name</label>
                     <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
-                    <select name="account_id" id="client_set" class="form-control">
+                    <select name="account_id" id="members" class="form-control">
                         <option value="">Select member</option>
                         @foreach ($clients as $client)
                             <option value="{{$client->account_id}}" {{(old('account_id') == $client->account_id ? 'selected': '')}}  >{{$client->lname.'  '.$client->fname . ' - '. $client->telephone1 . ' - no: ' .$client->account->accountno}}</option>
@@ -104,12 +104,12 @@
                 
                         <div class="col-md-6">
                             <label for="currency">Amount to pay</label>
-                            <input id="totalpay" type="text" class="form-control" readonly >
+                            <input id="totalpay" name="totalpay" type="text" class="form-control" readonly >
                         </div>
 
                         <div class="col-md-6">
                             <label for="currency">Monthly Payment</label>
-                            <input id="monthlypay" type="text" class="form-control" readonly >
+                            <input id="monthlypay" name="monthlypay" type="text" class="form-control" readonly >
                             
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                     <label for="">Guarantor *  </label>
                     <div class="row">
                         <div class="col-md-4">
-                            <select name="guar{{$i}}" id="" class="form-control">
+                            <select name="guar{{$i}}" id="" class="form-control guar">
                             <option value="">Select Guarantor</option>
                                 @foreach ($guarantors as $client)
                                     <option value="{{$client->clientid}}">{{$client->lname.' - '.$client->fname}}</option>

@@ -12305,6 +12305,7 @@ module.exports = function spread(callback) {
     $transactions = $('#transactions'); //Transaction type we are perfoming
     $acc_balance = $('#acc_balance');
     $loan_balance = $('#loan_balance');
+    $loan_topay = $('#loan_topay');
     $message = $('.js_message p.js_message_content');
     $submit_transact = $('#submit_transact');
     if (!$members.val()) {
@@ -12333,11 +12334,11 @@ module.exports = function spread(callback) {
         $this = $(this);
         if ($this.val() === 'withdrawal') {
             $accountid = selected_member.val();
-            checkWithdrawalState($accountid, $amount.val()); //Check state
+            checkWithdrawalState($accountid, $amount.val(), 'withdrawal'); //Check state
 
             $amount.on('keyup', function () {
                 $accountid = selected_member.val();
-                checkWithdrawalState($accountid, $amount.val());
+                checkWithdrawalState($accountid, $amount.val(), 'withdrawal');
             });
         } else if ($this.val() === 'deposit') {
             checkDepositState();
@@ -12350,10 +12351,10 @@ module.exports = function spread(callback) {
             });
         } else if ($this.val() == 'dcredit') {
             $accountid = selected_member.val();
-            checkLoanWithdrawalState($accountid, $amount.val());
+            checkWithdrawalState($accountid, $amount.val(), 'dcredit');
             $amount.on('keyup', function () {
                 $accountid = selected_member.val();
-                checkLoanWithdrawalState($accountid, $amount.val());
+                checkWithdrawalState($accountid, $amount.val(), 'dcredit');
             });
         }
     });
@@ -12362,10 +12363,19 @@ module.exports = function spread(callback) {
         if (accountid) {
             $.get($hidden_info.data('loan-url'), { accountid: accountid }, function (data) {
                 $acc_balance.val(data.account_bal);
+
+                //Set the loan balance
                 if (!data.loan_bal) {
                     $loan_balance.val(0);
                 } else {
                     $loan_balance.val(data.loan_bal);
+                }
+
+                //Set the loan balance to pay
+                if (!data.loan_topay) {
+                    $loan_topay.val(0);
+                } else {
+                    $loan_topay.val(data.loan_topay);
                 }
             });
         } else {}
@@ -12375,15 +12385,11 @@ module.exports = function spread(callback) {
     //1.Has enough balance
     //2.Has no outstanding loan
     //3. Member has not been blocked
-    function checkWithdrawalState(accountid, amount) {
+    function checkWithdrawalState(accountid, amount, type) {
         if (accountid) {
-            $.get($hidden_info.data('withdrawstate'), { accountid: accountid, amount: amount }, function (data) {
-
-                if (data.status == 'loan_active') {
-                    $message.text(data.message);
-                    $js_message.show();
-                    $submit_transact.attr('disabled', true);
-                } else if (data.status == 'balance_insufficient') {
+            $.get($hidden_info.data('withdrawstate'), { accountid: accountid, amount: amount, type: type }, function (data) {
+                console.log(data);
+                if (data.status == 'loan_active' || data.status == 'dcredit_small' || data.status == 'balance_insufficient') {
                     $message.text(data.message);
                     $js_message.show();
                     $submit_transact.attr('disabled', true);
@@ -12436,6 +12442,8 @@ module.exports = function spread(callback) {
                 if (data.status == 'no_loan') {
                     $message.text(data.message);
                     $js_message.show();
+                } else {
+                    $submit_transact.attr('disabled', false);
                 }
             });
         } else {}

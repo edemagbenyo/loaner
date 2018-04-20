@@ -71,7 +71,7 @@
                                     @elseif($t->type=='lcredit')
                                         Loan Payment
                                     @elseif($t->type=='ldebit')
-                                        Loan Payment
+                                        Loan Withdrawal
                                     @endif
                             </td>
                             <td>{{$t->amount}}</td>
