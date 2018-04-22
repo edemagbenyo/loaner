@@ -399,10 +399,10 @@ class AccountsController extends Controller
             $application->save();
 
             //Loan Amount available for redrawal
-            $loan_amount = doubleval($application->amount) + (doubleval($application->account->loan_balance) * 1.2);
+            $loan_amount = doubleval($application->amount) + doubleval($application->account->loan_balance);
             
             //Loan amount to pay
-            $loan_topay = doubleval($application->amount) + doubleval($application->account->column2);
+            $loan_topay = (doubleval($application->amount) *1.2) + doubleval($application->account->column2);
             
             $application->account->loan_balance = $loan_amount;
             $application->account->column2 = $loan_topay; //
@@ -430,6 +430,28 @@ class AccountsController extends Controller
             $message="Loan is under review.";
         }
         return redirect()->back()->with('message',$message);
+    }
+
+    /**
+    * Today
+    *
+    **/
+    public function queryTransact($fixed = NULL ,$date=NULL, $range=NULL){
+
+
+         if($fixed == 'today'){
+            $transactions = Transaction::where('updated_at','>=',Carbon::today())->where('updated_at','<=',Carbon::now())->get();
+            $date = 'Today';
+
+        }elseif($fixed =='yesterday'){
+            $transactions = Transaction::where('updated_at','>=',Carbon::yesterday())->where('updated_at','<=',Carbon::today())->get();
+            $date ='Yesterday';
+        }elseif($fixed =='full'){
+            $transactions = Cashbook::all();
+            $date ='All time';
+        }
+        
+        return view('accounts.transactions.query',compact('transactions'));
     }
 
 

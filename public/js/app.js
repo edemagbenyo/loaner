@@ -12216,7 +12216,7 @@ module.exports = function spread(callback) {
     $totalpay = $('#totalpay');
     $monthlypay = $('#monthlypay');
     $purpose = $('#purpose');
-    $client = $('#client_set');
+    $client = $('#members');
     $savings_balance = $('#savings_balance');
     $accno = $('#accno');
     $amountinwords = $('#amountinwords');
@@ -12255,10 +12255,13 @@ module.exports = function spread(callback) {
             $.get($hidden_info.data('url'), { accountid: $this.val() }, function (data) {
 
                 if (data.loan) {
+
                     $alert.show();
                     $('#error').text("User has unpaid loan in progress");
+                } else {
+                    $alert.hide();
                 }
-                console.log(data);
+                console.log(data.loan);
                 $savings_balance.val(data.balance);
             });
         } else {
@@ -12292,7 +12295,7 @@ module.exports = function spread(callback) {
     function validate() {
         if ($amount.val() && $client.val() && $purpose.val() && $repaymentperiod.val()) {
             $('#submitit').attr('disabled', false);
-
+            console.log('sth is worng');
             $amountinwords.val(converter.toWords($amount.val()) + " Ghana cedis");
         }
     }

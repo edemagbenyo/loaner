@@ -94,7 +94,7 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
 
     Route::get('query/sales/{fixed?}/{date?}/{range?}/', [
         'as' => 'query.sales',
-        'uses' => 'AccountsController@querySales'
+        'uses' => 'AccountsController@queryTransact'
     ]);
     // post transaction
     Route::post('transact/post', [
@@ -109,11 +109,11 @@ Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {
 
     
     
-    //Route for specific date cashbook record
-    Route::get('query/cashbook/{fixed?}/{date?}/{range?}/', [
-        'as' => 'query.cashbook',
-        'uses' => 'AccountsController@queryCashbook'
-    ]);
+    // //Route for specific date cashbook record
+    // Route::get('query/cashbook/{fixed?}/{date?}/{range?}/', [
+    //     'as' => 'query.cashbook',
+    //     'uses' => 'AccountsController@queryTransact'
+    // ]);
 
     //Route for opening and current balance
     Route::get('get/accloanbal', [

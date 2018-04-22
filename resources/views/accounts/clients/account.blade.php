@@ -36,12 +36,12 @@
                             <td style="font-weight: bold">{{$client->account->balance}}</td>
                         </tr>
                         <tr>
-                            <td>Loan Taken</td>
-                            <td style="font-weight: bold"></td>
+                            <td>Available Loan Balance</td>
+                            <td style="font-weight: bold">{{$client->account->loan_balance}}</td>
                         </tr>
                         <tr>
-                            <td>Loan Balance</td>
-                            <td style="font-weight: bold"></td>
+                            <td>Total Loan Granted</td>
+                            <td style="font-weight: bold">{{$client->account->loanTaken()}}</td>
                         </tr>
                     </table>
                 </div>

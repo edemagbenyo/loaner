@@ -74,7 +74,7 @@ class LoansController extends Controller
             'guar1'=>'required'
         ],
         [
-            'guar1.required'=>'Guardian is required'
+            'guar1.required'=>'A Guarantor is required to process the loan'
         ]);
         
         // dd($request->all());

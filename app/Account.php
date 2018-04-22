@@ -33,4 +33,22 @@ class Account extends Model
     public function client(){
         return $this->hasOne('App\Client','account_id','accountid');
     }
+
+    /**
+    * Return total loan taken
+    *
+    **/
+    public function loanTaken(){
+        return $this->hasMany('App\Application','account_id','accountid')->where('status','approved')->sum('amount');
+    }
+
+
+
+    /**
+    * Return total loan paid
+    *
+    **/
+    public function loanPaid(){
+    
+    }
 }

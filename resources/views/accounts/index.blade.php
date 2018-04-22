@@ -12,7 +12,7 @@
         @endif
         @if(Auth::user()->can(["manage-accounts","view-accounts-suppliers"]))
             <li role="presentation" class="{{(Request::segment(2) == 'transacts' ) ? 'active': ''}}"><a
-                        href="{{route('accounts.get.transact')}}">Transactions</a></li>
+                        href="{{route('accounts.get.transact')}}">Transactions List</a></li>
         @endif
         @if(Auth::user()->can(["manage-accounts","view-accounts-loans"]))
             <li role="presentation" class="{{(Request::segment(2) == 'loans' ) ? 'active': ''}}"><a
