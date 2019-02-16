@@ -22,8 +22,8 @@ class Application extends Model
      *
      **/
      public function applicant(){
-        $loan = $this->belongsTo('App\Client','client_id','clientid');
-        return $loan->fname. ' '.$loan->lname;
+        return $this->belongsTo('App\Client','client_id','clientid');
+        //return isset($loan)?$loan->fname:'N/A'. ' '.isset($loan)?$loan->lname:'N/A';
      }
 
      /**

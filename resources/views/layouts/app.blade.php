@@ -126,6 +126,10 @@
                                 <li role="presentation" class="{{Request::segment(1) == 'users' ? 'active': ''}}"><a
                                             href="{{route('users.index')}}">@lang('menu.use') </a></li>
                             @endif
+                            @if(Auth::user()->can("*reports"))
+                                <li role="presentation" class="{{Request::segment(1) == 'reports' ? 'active': ''}}"><a
+                                            href="{{route('reports.index')}}">@lang('menu.rep') </a></li>
+                            @endif
                             @if(Auth::user()->can("*settings"))
                                 <li role="presentation" class="{{Request::segment(1) == 'settings' ? 'active': ''}}"><a
                                             href="{{route('settings.index')}}">@lang('menu.set') </a></li>

@@ -35,4 +35,13 @@ class Transaction extends Model
      public function user(){
         return $this->hasOne('App\User','userid','user_id');
      }
+
+
+     /**
+     * user
+     *
+     **/
+     public function client(){
+        return $this->BelongsTo('App\Client','client_id','clientid');
+     }
 }

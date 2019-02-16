@@ -9,6 +9,7 @@
      'dpt' => 'Department',
      'acc' => 'Accounting',
      'use' => 'Users',
+     'rep' => 'Reports',
      'set' => 'Settings',
      'pos' => 'POS',
      'das' => 'Welcome',

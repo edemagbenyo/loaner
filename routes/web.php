@@ -84,6 +84,41 @@ Route::group(['prefix' => 'settings', 'middleware' => 'auth'], function () {
     Route::resource('permissions', 'Settings\PermissionsController');
 
 });
+Route::group(['prefix' => 'reports', 'middleware' => 'auth'], function () {
+    Route::get('index', [
+        'as' => 'reports.index',
+        'uses' => 'ReportsController@index'
+    ]);
+    Route::post('loan', [
+        'as' => 'reports.loan',
+        'uses' => 'ReportsController@postLoan'
+    ]);
+    Route::get('interest', [
+        'as' => 'reports.interest',
+        'uses' => 'ReportsController@interest'
+    ]);
+    Route::post('interest', [
+        'as' => 'reports.interest',
+        'uses' => 'ReportsController@postInterest'
+    ]);
+    Route::get('registration', [
+        'as' => 'reports.registration',
+        'uses' => 'ReportsController@registration'
+    ]);
+    Route::post('registration', [
+        'as' => 'reports.registration',
+        'uses' => 'ReportsController@postRegistration'
+    ]);
+    Route::get('account', [
+        'as' => 'reports.account',
+        'uses' => 'ReportsController@account'
+    ]);
+    Route::post('account', [
+        'as' => 'reports.account',
+        'uses' => 'ReportsController@postAccount'
+    ]);
+
+});
 
 //Account routes
 Route::group(['prefix' => 'accounts', 'middleware' => 'auth'], function () {

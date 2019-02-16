@@ -59,5 +59,11 @@ class Client extends Model
         }
         return number_format(($paid/$total) * 100 , 2)."%";
     }
-    
+    public function register(){
+        return $this->belongsTo('App\User','user_id','userid');
+    }
+
+    public function transaction($start,$end){
+        return $this->hasMany('App\User','client_id','clientid')->sum('amount')->whereBetween('created_at',[$start,$end]);
+    }
 }
