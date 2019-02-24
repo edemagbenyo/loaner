@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <img src="{{asset('img/logo.jpg')}}" alt="">
+                    <img src="{{asset('img/oldb/logo.jpeg')}}" alt="">
                 </div>
                 <style>
 
@@ -95,7 +95,7 @@
                     }
                 </style>
                 <div class="links">
-                    <a href="{{url('home')}}">EMPOWERMENT UNION</a>
+                    <!-- <a href="{{url('home')}}">EMPOWERMENT UNION"</a> -->
                 </div>
             </div>
         </div>
