@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $members_count = Client::count();
+        $members_count = count(Client::all());
         return view('home',compact('members_count'));
     }
 }
